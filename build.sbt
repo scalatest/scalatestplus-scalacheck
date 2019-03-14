@@ -4,7 +4,7 @@ import scalanative.sbtplugin.ScalaNativePluginInternal.NativeTest
 val sharedSettings = Seq(
   name := "scalatestplus-scalacheck",
   organization := "org.scalatestplus",
-  version := "1.0.0-SNAP2",
+  version := "1.0.0-SNAP3",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -52,6 +52,25 @@ lazy val scalatestPlusScalaCheck =
   crossProject(JSPlatform, JVMPlatform, NativePlatform)
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(sharedSettings)
+    .enablePlugins(SbtOsgi)
+    .settings(osgiSettings: _*).settings(
+      OsgiKeys.exportPackage := Seq(
+        "org.scalatest.enablers.*", 
+        "org.scalatest.check.*"
+      ),
+      OsgiKeys.importPackage := Seq(
+        "org.scalatest.*",
+        "org.scalactic.*", 
+        "scala.*;version=\"$<range;[==,=+);$<replace;"+scalaBinaryVersion.value+";-;.>>\"",
+        "*;resolution:=optional"
+      ),
+      OsgiKeys.additionalHeaders:= Map(
+        "Bundle-Name" -> "ScalaTestPlusScalaCheck",
+        "Bundle-Description" -> "ScalaTest+ScalaCheck is an open-source integration library between ScalaTest and ScalaCheck for Scala projects.",
+        "Bundle-DocURL" -> "http://www.scalacheck.org/",
+        "Bundle-Vendor" -> "Artima, Inc."
+      )
+    )
     .jsSettings(
       crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-M5"),
       libraryDependencies ++= Seq(
