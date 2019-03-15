@@ -4,7 +4,7 @@ import scalanative.sbtplugin.ScalaNativePluginInternal.NativeTest
 val sharedSettings = Seq(
   name := "scalatestplus-scalacheck",
   organization := "org.scalatestplus",
-  version := "1.0.0-SNAP1",
+  version := "1.0.0-SNAP2",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -24,7 +24,6 @@ val sharedSettings = Seq(
   crossScalaVersions := List("2.11.12", "2.12.8", "2.13.0-M5"),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalacheck" %%% "scalacheck" % "1.14.1-86bd34e-SNAPSHOT",
     "org.scalatest" %%% "scalatest" % "3.1.0-SNAP7"
   ),
   sourceGenerators in Compile += {
@@ -54,11 +53,24 @@ lazy val scalatestPlusScalaCheck =
   crossProject(JSPlatform, JVMPlatform, NativePlatform)
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(sharedSettings)
-    .jsSettings(scalaVersion := "2.12.8")
-    .jvmSettings(scalaVersion := "2.12.8")
+    .jsSettings(
+      scalaVersion := "2.12.8", 
+      libraryDependencies ++= Seq(
+        "org.scalacheck" %%% "scalacheck" % "1.14.0"
+      )
+    )
+    .jvmSettings(
+      scalaVersion := "2.12.8", 
+      libraryDependencies ++= Seq(
+        "org.scalacheck" %%% "scalacheck" % "1.14.0"
+      )
+    )
     .nativeSettings(
       scalaVersion := "2.11.12", 
-      nativeLinkStubs in NativeTest := true
+      nativeLinkStubs in NativeTest := true, 
+      libraryDependencies ++= Seq(
+        "org.scalacheck" %%% "scalacheck" % "1.14.1-86bd34e-SNAPSHOT"
+      )
     )
 
 lazy val scalatestPlusScalaCheckJS     = scalatestPlusScalaCheck.js
