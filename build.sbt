@@ -21,10 +21,9 @@ val sharedSettings = Seq(
       url("https://github.com/cheeseng")
     )
   ),
-  crossScalaVersions := List("2.11.12", "2.12.8", "2.13.0-M5"),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.1.0-SNAP7"
+    "org.scalatest" %%% "scalatest" % "3.1.0-SNAP8"
   ),
   sourceGenerators in Compile += {
     Def.task {
@@ -54,13 +53,13 @@ lazy val scalatestPlusScalaCheck =
     .crossType(CrossType.Pure) // [Pure, Full, Dummy], default: CrossType.Full
     .settings(sharedSettings)
     .jsSettings(
-      scalaVersion := "2.12.8", 
+      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-M5"),
       libraryDependencies ++= Seq(
         "org.scalacheck" %%% "scalacheck" % "1.14.0"
       )
     )
     .jvmSettings(
-      scalaVersion := "2.12.8", 
+      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-M5"),
       libraryDependencies ++= Seq(
         "org.scalacheck" %%% "scalacheck" % "1.14.0"
       )
