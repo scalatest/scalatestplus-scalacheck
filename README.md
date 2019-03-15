@@ -8,6 +8,7 @@ Please use the following commands to publish to Sonatype:
 ```
 $ export SCALAJS_VERSION=0.6.26
 $ sbt clean scalatestPlusScalaCheckJS/publishSigned scalatestPlusScalaCheckJVM/publishSigned scalatestPlusScalaCheckNative/publishSigned
+$ sbt ++2.10.7 clean scalatestPlusScalaCheckJS/publishSigned scalatestPlusScalaCheckJVM/publishSigned
 $ sbt ++2.11.12 clean scalatestPlusScalaCheckJS/publishSigned scalatestPlusScalaCheckJVM/publishSigned
 $ sbt ++2.13.0-M5 clean scalatestPlusScalaCheckJS/publishSigned scalatestPlusScalaCheckJVM/publishSigned
 $ export SCALAJS_VERSION=1.0.0-M3
