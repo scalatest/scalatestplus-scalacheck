@@ -235,7 +235,7 @@ trait Checkers extends ScalaCheckConfiguration {
    */
   def check[A1, P](f: A1 => P, configParams: PropertyCheckConfigParam*)
     (implicit
-      config: PropertyCheckConfigurable,
+      config: PropertyCheckConfiguration,
       p: P => Prop,
       a1: Arbitrary[A1], s1: Shrink[A1], pp1: A1 => Pretty,
       prettifier: Prettifier,
@@ -253,7 +253,7 @@ trait Checkers extends ScalaCheckConfiguration {
    */
   def check[A1, A2, P](f: (A1,A2) => P, configParams: PropertyCheckConfigParam*)
     (implicit
-      config: PropertyCheckConfigurable,
+      config: PropertyCheckConfiguration,
       p: P => Prop,
       a1: Arbitrary[A1], s1: Shrink[A1], pp1: A1 => Pretty,
       a2: Arbitrary[A2], s2: Shrink[A2], pp2: A2 => Pretty,
@@ -272,7 +272,7 @@ trait Checkers extends ScalaCheckConfiguration {
    */
   def check[A1, A2, A3, P](f: (A1,A2,A3) => P, configParams: PropertyCheckConfigParam*)
     (implicit
-      config: PropertyCheckConfigurable,
+      config: PropertyCheckConfiguration,
       p: P => Prop,
       a1: Arbitrary[A1], s1: Shrink[A1], pp1: A1 => Pretty,
       a2: Arbitrary[A2], s2: Shrink[A2], pp2: A2 => Pretty,
@@ -292,7 +292,7 @@ trait Checkers extends ScalaCheckConfiguration {
    */
   def check[A1, A2, A3, A4, P](f: (A1,A2,A3,A4) => P, configParams: PropertyCheckConfigParam*)
     (implicit
-      config: PropertyCheckConfigurable,
+      config: PropertyCheckConfiguration,
       p: P => Prop,
       a1: Arbitrary[A1], s1: Shrink[A1], pp1: A1 => Pretty,
       a2: Arbitrary[A2], s2: Shrink[A2], pp2: A2 => Pretty,
@@ -313,7 +313,7 @@ trait Checkers extends ScalaCheckConfiguration {
    */
   def check[A1, A2, A3, A4, A5, P](f: (A1,A2,A3,A4,A5) => P, configParams: PropertyCheckConfigParam*)
     (implicit
-      config: PropertyCheckConfigurable,
+      config: PropertyCheckConfiguration,
       p: P => Prop,
       a1: Arbitrary[A1], s1: Shrink[A1], pp1: A1 => Pretty,
       a2: Arbitrary[A2], s2: Shrink[A2], pp2: A2 => Pretty,
@@ -335,7 +335,7 @@ trait Checkers extends ScalaCheckConfiguration {
    */
   def check[A1, A2, A3, A4, A5, A6, P](f: (A1,A2,A3,A4,A5,A6) => P, configParams: PropertyCheckConfigParam*)
     (implicit
-      config: PropertyCheckConfigurable,
+      config: PropertyCheckConfiguration,
       p: P => Prop,
       a1: Arbitrary[A1], s1: Shrink[A1], pp1: A1 => Pretty,
       a2: Arbitrary[A2], s2: Shrink[A2], pp2: A2 => Pretty,
@@ -367,7 +367,7 @@ trait Checkers extends ScalaCheckConfiguration {
    * @param p the property to check
    * @throws TestFailedException if a test case is discovered for which the property doesn't hold.
    */
-  def check(p: Prop, configParams: PropertyCheckConfigParam*)(implicit config: PropertyCheckConfigurable, prettifier: Prettifier, pos: source.Position): Assertion = {
+  def check(p: Prop, configParams: PropertyCheckConfigParam*)(implicit config: PropertyCheckConfiguration, prettifier: Prettifier, pos: source.Position): Assertion = {
     val params = getScalaCheckParams(configParams, config)
     asserting.check(p, params, prettifier, pos)
   }

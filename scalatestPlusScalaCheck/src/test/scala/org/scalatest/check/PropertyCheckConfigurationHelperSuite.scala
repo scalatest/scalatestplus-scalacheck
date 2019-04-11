@@ -111,13 +111,7 @@ class PropertyCheckConfigurationHelperSuite extends FunSuite with Matchers {
     params.maxSize should equal (PassedMinSize + PassedSizeRange)
   }
 
-  test("getScalaCheckParams throws IAE if passed multiple maxSize config params") {
-    intercept[IllegalArgumentException] {
-      getScalaCheckParams(Seq(MaxSize(33), MaxSize(34)), defaultConfig)
-    }
-    intercept[IllegalArgumentException] {
-      getScalaCheckParams(Seq(MaxSize(33), SizeRange(34)), defaultConfig)
-    }
+  test("getScalaCheckParams throws IAE if passed multiple sizeRange config params") {
     intercept[IllegalArgumentException] {
       getScalaCheckParams(Seq(SizeRange(33), SizeRange(34)), defaultConfig)
     }

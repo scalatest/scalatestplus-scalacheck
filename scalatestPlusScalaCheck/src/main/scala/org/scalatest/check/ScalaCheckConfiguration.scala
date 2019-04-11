@@ -23,24 +23,19 @@ private[scalatest] trait ScalaCheckConfiguration extends Configuration {
 
   private[scalatest] def getScalaCheckParams(
                                               configParams: Seq[Configuration#PropertyCheckConfigParam],
-                                              c: PropertyCheckConfigurable
+                                              config: PropertyCheckConfiguration
                                             ): Parameters = {
 
-    val config: PropertyCheckConfiguration = c.asPropertyCheckConfiguration
     var minSuccessful: Option[Int] = None
-    var maxDiscarded: Option[Int] = None
     var maxDiscardedFactor: Option[Double] = None
     var pminSize: Option[Int] = None
     var psizeRange: Option[Int] = None
-    var pmaxSize: Option[Int] = None
     var pworkers: Option[Int] = None
 
     var minSuccessfulTotalFound = 0
-    var maxDiscardedTotalFound = 0
     var maxDiscardedFactorTotalFound = 0
     var minSizeTotalFound = 0
     var sizeRangeTotalFound = 0
-    var maxSizeTotalFound = 0
     var workersTotalFound = 0
 
     for (configParam <- configParams) {
@@ -48,9 +43,6 @@ private[scalatest] trait ScalaCheckConfiguration extends Configuration {
         case param: MinSuccessful =>
           minSuccessful = Some(param.value)
           minSuccessfulTotalFound += 1
-        case param: MaxDiscarded =>
-          maxDiscarded = Some(param.value)
-          maxDiscardedTotalFound += 1
         case param: MaxDiscardedFactor =>
           maxDiscardedFactor = Some(param.value)
           maxDiscardedFactorTotalFound += 1
@@ -60,9 +52,6 @@ private[scalatest] trait ScalaCheckConfiguration extends Configuration {
         case param: SizeRange =>
           psizeRange = Some(param.value)
           sizeRangeTotalFound += 1
-        case param: MaxSize =>
-          pmaxSize = Some(param.value)
-          maxSizeTotalFound += 1
         case param: Workers =>
           pworkers = Some(param.value)
           workersTotalFound += 1
@@ -71,14 +60,12 @@ private[scalatest] trait ScalaCheckConfiguration extends Configuration {
 
     if (minSuccessfulTotalFound > 1)
       throw new IllegalArgumentException("can pass at most one MinSuccessful config parameters, but " + minSuccessfulTotalFound + " were passed")
-    val maxDiscardedAndFactorTotalFound = maxDiscardedTotalFound + maxDiscardedFactorTotalFound
-    if (maxDiscardedAndFactorTotalFound > 1)
-      throw new IllegalArgumentException("can pass at most one MaxDiscarded or MaxDiscardedFactor config parameters, but " + maxDiscardedAndFactorTotalFound + " were passed")
+    if (maxDiscardedFactorTotalFound > 1)
+      throw new IllegalArgumentException("can pass at most one MaxDiscardedFactor config parameters, but " + maxDiscardedFactorTotalFound + " were passed")
     if (minSizeTotalFound > 1)
       throw new IllegalArgumentException("can pass at most one MinSize config parameters, but " + minSizeTotalFound + " were passed")
-    val maxSizeAndSizeRangeTotalFound = maxSizeTotalFound + sizeRangeTotalFound
-    if (maxSizeAndSizeRangeTotalFound > 1)
-      throw new IllegalArgumentException("can pass at most one SizeRange or MaxSize config parameters, but " + maxSizeAndSizeRangeTotalFound + " were passed")
+    if (sizeRangeTotalFound > 1)
+      throw new IllegalArgumentException("can pass at most one SizeRange config parameters, but " + sizeRangeTotalFound + " were passed")
     if (workersTotalFound > 1)
       throw new IllegalArgumentException("can pass at most one Workers config parameters, but " + workersTotalFound + " were passed")
 
@@ -86,28 +73,9 @@ private[scalatest] trait ScalaCheckConfiguration extends Configuration {
 
     val minSize: Int = pminSize.getOrElse(config.minSize)
 
-    val maxSize = {
-      (psizeRange, pmaxSize, config.legacyMaxSize) match {
-        case (None, None, Some(legacyMaxSize)) =>
-          legacyMaxSize
-        case (None, Some(maxSize), _) =>
-          maxSize
-        case _ =>
-          psizeRange.getOrElse(config.sizeRange.value) + minSize
-      }
-    }
+    val maxSize = psizeRange.getOrElse(config.sizeRange.value) + minSize
 
-    val maxDiscardRatio: Float = {
-      (maxDiscardedFactor, maxDiscarded, config.legacyMaxDiscarded, minSuccessful) match {
-        case (None, None, Some(legacyMaxDiscarded), Some(specifiedMinSuccessful)) =>
-          PropertyCheckConfiguration.calculateMaxDiscardedFactor(specifiedMinSuccessful, legacyMaxDiscarded).toFloat
-        case (None, Some(md), _, _) =>
-          if (md < 0) Parameters.default.maxDiscardRatio
-          else PropertyCheckConfiguration.calculateMaxDiscardedFactor(minSuccessfulTests, md).toFloat
-        case _ =>
-          maxDiscardedFactor.getOrElse(config.maxDiscardedFactor.value).toFloat
-      }
-    }
+    val maxDiscardRatio: Float = maxDiscardedFactor.getOrElse(config.maxDiscardedFactor.value).toFloat
 
     Parameters.default
       .withMinSuccessfulTests(minSuccessfulTests)

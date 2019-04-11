@@ -4,7 +4,7 @@ import scalanative.sbtplugin.ScalaNativePluginInternal.NativeTest
 val sharedSettings = Seq(
   name := "scalatestplus-scalacheck",
   organization := "org.scalatestplus",
-  version := "1.0.0-SNAP3",
+  version := "1.0.0-SNAP4",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -23,7 +23,7 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.1.0-SNAP8"
+    "org.scalatest" %%% "scalatest" % "3.1.0-SNAP9"
   ),
   sourceGenerators in Compile += {
     Def.task {
@@ -72,13 +72,13 @@ lazy val scalatestPlusScalaCheck =
       )
     )
     .jsSettings(
-      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-M5"),
+      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC1"),
       libraryDependencies ++= Seq(
         "org.scalacheck" %%% "scalacheck" % "1.14.0"
       )
     )
     .jvmSettings(
-      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-M5"),
+      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC1"),
       libraryDependencies ++= Seq(
         "org.scalacheck" %%% "scalacheck" % "1.14.0"
       )
