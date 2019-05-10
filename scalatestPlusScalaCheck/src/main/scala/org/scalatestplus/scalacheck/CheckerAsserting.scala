@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.scalatest.enablers
+package org.scalatestplus.scalacheck
 
 import org.scalactic._
 import NameUtil.getSimpleNameOfAnObjectsClass
@@ -22,14 +22,11 @@ import org.scalacheck.Prop.Arg
 import org.scalacheck.Test
 import org.scalacheck.util.Pretty
 import org.scalatest.Assertion
-import org.scalatest.Expectation
+//import org.scalatest.Expectation
 import org.scalatest.Fact
-import org.scalatest.FailureMessages
-import org.scalatest.Resources
 import org.scalatest.Succeeded
-import org.scalatest.UnquotedString
 import org.scalatest.exceptions.StackDepthException
-import FailureMessages.decorateToStringValue
+import org.scalatestplus.scalacheck.FailureMessages.decorateToStringValue
 import org.scalatest.exceptions.GeneratorDrivenPropertyCheckFailedException
 import org.scalatest.exceptions.StackDepth
 
@@ -166,9 +163,9 @@ abstract class UnitCheckerAsserting {
       } else indicateSuccess(FailureMessages.propertyCheckSucceeded)
     }
 
-    private[scalatest] def indicateSuccess(message: => String): Result
+    private[scalacheck] def indicateSuccess(message: => String): Result
 
-    private[scalatest] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Result
+    private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Result
   }
 
   /**
@@ -180,8 +177,8 @@ abstract class UnitCheckerAsserting {
     new CheckerAssertingImpl[T] {
       type Result = Unit
       def succeed(result: T) = (true, None)
-      private[scalatest] def indicateSuccess(message: => String): Unit = ()
-      private[scalatest] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Unit = {
+      private[scalacheck] def indicateSuccess(message: => String): Unit = ()
+      private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Unit = {
         throw new GeneratorDrivenPropertyCheckFailedException(
           messageFun,
           optionalCause,
@@ -202,12 +199,12 @@ abstract class UnitCheckerAsserting {
  */
 abstract class ExpectationCheckerAsserting extends UnitCheckerAsserting {
 
-  implicit def assertingNatureOfExpectation(implicit prettifier: Prettifier): CheckerAsserting[Expectation] { type Result = Expectation } = {
+  /*implicit def assertingNatureOfExpectation(implicit prettifier: Prettifier): CheckerAsserting[Expectation] { type Result = Expectation } = {
     new CheckerAssertingImpl[Expectation] {
       type Result = Expectation
       def succeed(result: Expectation) = (result.isYes, result.cause)
-      private[scalatest] def indicateSuccess(message: => String): Expectation = Fact.Yes(message)(prettifier)
-      private[scalatest] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Expectation = {
+      private[scalacheck] def indicateSuccess(message: => String): Expectation = Fact.Yes(message)(prettifier)
+      private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Expectation = {
         val gdpcfe =
           new GeneratorDrivenPropertyCheckFailedException(
             messageFun,
@@ -223,7 +220,7 @@ abstract class ExpectationCheckerAsserting extends UnitCheckerAsserting {
         Fact.No(message)(prettifier)
       }
     }
-  }
+  }*/
 }
 
 /**
@@ -241,8 +238,8 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
     new CheckerAssertingImpl[Assertion] {
       type Result = Assertion
       def succeed(result: Assertion) = (true, None)
-      private[scalatest] def indicateSuccess(message: => String): Assertion = Succeeded
-      private[scalatest] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Assertion = {
+      private[scalacheck] def indicateSuccess(message: => String): Assertion = Succeeded
+      private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Assertion = {
         throw new GeneratorDrivenPropertyCheckFailedException(
           messageFun,
           optionalCause,
@@ -257,7 +254,7 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
     }
   }
 
-  private[enablers] def getArgsWithSpecifiedNames(argNames: Option[List[String]], scalaCheckArgs: List[Arg[Any]]) = {
+  private[scalacheck] def getArgsWithSpecifiedNames(argNames: Option[List[String]], scalaCheckArgs: List[Arg[Any]]) = {
     if (argNames.isDefined) {
       // length of scalaCheckArgs should equal length of argNames
       val zipped = argNames.get zip scalaCheckArgs
@@ -267,13 +264,13 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
       scalaCheckArgs
   }
 
-  private[enablers] def getLabelDisplay(labels: Set[String]): String =
+  private[scalacheck] def getLabelDisplay(labels: Set[String]): String =
     if (labels.size > 0)
       "\n  " + (if (labels.size == 1) Resources.propCheckLabel else Resources.propCheckLabels) + "\n" + labels.map("    " + _).mkString("\n")
     else
       ""
 
-  private[enablers] def argsAndLabels(result: Test.Result): (List[Any], List[String]) = {
+  private[scalacheck] def argsAndLabels(result: Test.Result): (List[Any], List[String]) = {
 
     val (scalaCheckArgs, scalaCheckLabels) =
       result.status match {
@@ -292,7 +289,7 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
   }
 
   // TODO: Internationalize these, and make them consistent with FailureMessages stuff (only strings get quotes around them, etc.)
-  private[enablers] def prettyTestStats(result: Test.Result, prettifier: Prettifier) = result.status match {
+  private[scalacheck] def prettyTestStats(result: Test.Result, prettifier: Prettifier) = result.status match {
 
     case Test.Proved(args) =>
       "OK, proved property:                   \n" + prettyArgs(args, prettifier)
@@ -311,7 +308,7 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
       FailureMessages.propertyException(prettifier, UnquotedString(e.getClass.getSimpleName)) + "\n" + prettyLabels(labels) + prettyArgs(args, prettifier)
   }
 
-  private[enablers] def prettyLabels(labels: Set[String]) = {
+  private[scalacheck] def prettyLabels(labels: Set[String]) = {
     if (labels.isEmpty) ""
     else if (labels.size == 1) "Label of failing property: " + labels.iterator.next + "\n"
     else "Labels of failing property: " + labels.mkString("\n") + "\n"
@@ -325,7 +322,7 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
   //
   // Passes 0 as verbosity value to prettyArg function.
   //
-  private[enablers] def decorateArgToStringValue(arg: Arg[_], prettifier: Prettifier): String =
+  private[scalacheck] def decorateArgToStringValue(arg: Arg[_], prettifier: Prettifier): String =
     arg.arg match {
       case null         => decorateToStringValue(prettifier, arg.arg)
       case _: Unit      => decorateToStringValue(prettifier, arg.arg)
@@ -335,7 +332,7 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
       case _            => arg.prettyArg(new Pretty.Params(0))
     }
 
-  private[enablers] def prettyArgs(args: List[Arg[_]], prettifier: Prettifier) = {
+  private[scalacheck] def prettyArgs(args: List[Arg[_]], prettifier: Prettifier) = {
     val strs = for((a, i) <- args.zipWithIndex) yield (
       "    " +
         (if (a.label == "") "arg" + i else a.label) +

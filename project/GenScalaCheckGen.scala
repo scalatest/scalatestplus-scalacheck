@@ -49,7 +49,6 @@ import org.scalacheck.Prop
 import org.scalacheck.Gen
 import org.scalacheck.Prop._
 import org.scalatest.exceptions.DiscardedEvaluationException
-import org.scalatest.enablers.CheckerAsserting
 import org.scalatest.prop.Whenever
 import org.scalactic._
 

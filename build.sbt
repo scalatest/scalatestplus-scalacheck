@@ -34,7 +34,7 @@ val sharedSettings = Seq(
     Def.task {
       GenScalaCheckGen.genTest((sourceManaged in Test).value / "org" / "scalatest" / "check", version.value, scalaVersion.value)
     }
-  },
+  }, 
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     Some("publish-releases" at nexus + "service/local/staging/deploy/maven2")
@@ -75,20 +75,38 @@ lazy val scalatestPlusScalaCheck =
       crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC1"),
       libraryDependencies ++= Seq(
         "org.scalacheck" %%% "scalacheck" % "1.14.0"
-      )
+      ), 
+      sourceGenerators in Compile += {
+        Def.task {
+          GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
+          GenResourcesJSVM.genFailureMessages((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
+        }
+      }
     )
     .jvmSettings(
       crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC1"),
       libraryDependencies ++= Seq(
         "org.scalacheck" %%% "scalacheck" % "1.14.0"
-      )
+      ), 
+      sourceGenerators in Compile += {
+        Def.task {
+          GenResourcesJVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
+          GenResourcesJVM.genFailureMessages((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
+        }
+      }
     )
     .nativeSettings(
       scalaVersion := "2.11.12", 
       nativeLinkStubs in NativeTest := true, 
       libraryDependencies ++= Seq(
         "org.scalacheck" %%% "scalacheck" % "1.14.1-86bd34e-SNAPSHOT"
-      )
+      ), 
+      sourceGenerators in Compile += {
+        Def.task {
+          GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
+          GenResourcesJSVM.genFailureMessages((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
+        }
+      }
     )
 
 lazy val scalatestPlusScalaCheckJS     = scalatestPlusScalaCheck.js

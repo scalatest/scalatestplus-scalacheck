@@ -15,7 +15,6 @@
  */
 package org.scalatestplus.scalacheck
 
-import org.scalatest.enablers.CheckerAsserting
 import org.scalatest.prop.Configuration
 import org.scalatest.Assertion
 import org.scalacheck.Arbitrary
