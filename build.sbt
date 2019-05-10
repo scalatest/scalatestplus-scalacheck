@@ -4,7 +4,7 @@ import scalanative.sbtplugin.ScalaNativePluginInternal.NativeTest
 val sharedSettings = Seq(
   name := "scalatestplus-scalacheck",
   organization := "org.scalatestplus",
-  version := "1.0.0-SNAP4",
+  version := "1.0.0-SNAP5",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
