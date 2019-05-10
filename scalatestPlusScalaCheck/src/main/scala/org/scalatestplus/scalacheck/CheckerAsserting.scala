@@ -15,7 +15,7 @@
  */
 package org.scalatestplus.scalacheck
 
-import org.scalactic._
+import org.scalactic.{Resources => _, FailureMessages => _, UnquotedString => _, _}
 import NameUtil.getSimpleNameOfAnObjectsClass
 import org.scalacheck.Prop
 import org.scalacheck.Prop.Arg
