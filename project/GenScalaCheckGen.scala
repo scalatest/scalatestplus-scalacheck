@@ -38,8 +38,8 @@ object GenScalaCheckGen {
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.scalatest
-package check
+package org.scalatestplus
+package scalacheck
                           """
 
   val propertyCheckPreamble = """
@@ -449,7 +449,7 @@ import org.scalactic._
  * 
  * @author Bill Venners
  */
-trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatest.check.ScalaCheckConfiguration {
+trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.scalacheck.ScalaCheckConfiguration {
 
   /**
    * Performs a property check by applying the specified property check function to arguments
@@ -3123,13 +3123,13 @@ $okayExpressions$
           bw.write("import org.scalacheck.Prop.{Exception => _, _}\n")
         }
         if (!mixinInvitationStyle)
-          bw.write("import org.scalatest.check." + traitOrObjectName + "._\n")
+          bw.write("import org.scalatestplus.scalacheck." + traitOrObjectName + "._\n")
         if (checkMethod == "expect")
           bw.write("import org.scalatest.Expectations._\n")
         bw.write("\n")
         bw.write(
-          "class " + checkMethod.capitalize + suiteClassName + " extends FunSpec " +
-            (if (mixinInvitationStyle) "with org.scalatest.check." + traitOrObjectName else "") + " {\n")
+          "class " + checkMethod.capitalize + suiteClassName + " extends org.scalatest.funspec.AnyFunSpec " +
+            (if (mixinInvitationStyle) "with org.scalatestplus.scalacheck." + traitOrObjectName else "") + " {\n")
         bw.write(generatorSuitePostamble)
         val alpha = "abcdefghijklmnopqrstuv"
         for (i <- 1 to 6) {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.scalatest.check
+package org.scalatestplus.scalacheck
 
 import org.scalacheck._
 import org.scalatest._
@@ -25,7 +25,7 @@ import org.scalacheck.util.Pretty
 import org.scalatest.exceptions.TestFailedException
 import org.scalatest.prop.{PropertyChecks, Randomizer}
 
-class ScalaCheckGeneratorsSpec extends FunSpec with PropertyChecks {
+class ScalaCheckGeneratorsSpec extends funspec.AnyFunSpec with PropertyChecks {
 
   describe("The ScalaCheckGenerators trait") {
     it("should provide an implicit Generator for a type given an implicit Arbitrary and Shrink for that type") {

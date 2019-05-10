@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.scalatest.check
+package org.scalatestplus.scalacheck
 
 import org.scalacheck._
 import org.scalatest._
@@ -25,7 +25,7 @@ import org.scalacheck.util.Pretty
 import org.scalatest.exceptions.TestFailedException
 import org.scalactic.source.Position
 
-class CheckersSpec extends FunSpec with Checkers {
+class CheckersSpec extends funspec.AnyFunSpec with Checkers {
 
   def expectFileNameLineNumber(ex: GeneratorDrivenPropertyCheckFailedException, expectedFileName: String, expectedLineNumber: Int): Unit = {
     assertResult(expectedFileName)(ex.failedCodeFileName.getOrElse(null))

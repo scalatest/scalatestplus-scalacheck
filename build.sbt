@@ -56,7 +56,7 @@ lazy val scalatestPlusScalaCheck =
     .settings(osgiSettings: _*).settings(
       OsgiKeys.exportPackage := Seq(
         "org.scalatest.enablers.*", 
-        "org.scalatest.check.*"
+        "org.scalatestplus.scalacheck.*"
       ),
       OsgiKeys.importPackage := Seq(
         "org.scalatest.*",

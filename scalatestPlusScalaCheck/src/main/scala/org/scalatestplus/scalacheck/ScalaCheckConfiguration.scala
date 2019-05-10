@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.scalatest.check
+package org.scalatestplus.scalacheck
 
 import org.scalacheck.Test.Parameters
 import org.scalacheck.Test.TestCallback
 import org.scalatest.prop.Configuration
 
-private[scalatest] trait ScalaCheckConfiguration extends Configuration {
+private[scalacheck] trait ScalaCheckConfiguration extends Configuration {
 
-  private[scalatest] def getScalaCheckParams(
+  private[scalacheck] def getScalaCheckParams(
                                               configParams: Seq[Configuration#PropertyCheckConfigParam],
                                               config: PropertyCheckConfiguration
                                             ): Parameters = {
@@ -89,4 +89,4 @@ private[scalatest] trait ScalaCheckConfiguration extends Configuration {
 
 }
 
-private[scalatest] object ScalaCheckConfiguration extends ScalaCheckConfiguration
+private[scalacheck] object ScalaCheckConfiguration extends ScalaCheckConfiguration
