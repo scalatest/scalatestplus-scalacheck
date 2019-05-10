@@ -23,7 +23,7 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.1.0-SNAP9"
+    "org.scalatest" %%% "scalatest" % "3.1.0-SNAP10"
   ),
   sourceGenerators in Compile += {
     Def.task {
