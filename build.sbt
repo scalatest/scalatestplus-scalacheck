@@ -54,6 +54,8 @@ lazy val scalatestPlusScalaCheck =
     .settings(sharedSettings)
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
+      scalaVersion := "2.13.0",
+      crossScalaVersions := Seq(scalaVersion.value, "2.12.8", "2.11.12", "2.10.7"),
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
@@ -71,7 +73,6 @@ lazy val scalatestPlusScalaCheck =
       )
     )
     .jsSettings(
-      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC2"),
       libraryDependencies ++= Seq(
         "org.scalacheck" %%% "scalacheck" % "1.14.0"
       ), 
@@ -83,7 +84,6 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .jvmSettings(
-      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC2"),
       libraryDependencies ++= Seq(
         "org.scalacheck" %%% "scalacheck" % "1.14.0"
       ), 
@@ -95,7 +95,8 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .nativeSettings(
-      scalaVersion := "2.11.12", 
+      scalaVersion := "2.11.12",
+      crossScalaVersions := Seq(scalaVersion.value, "2.10.7"),
       nativeLinkStubs in NativeTest := true, 
       libraryDependencies ++= Seq(
         "org.scalacheck" %%% "scalacheck" % "1.14.1-86bd34e-SNAPSHOT"
@@ -107,7 +108,3 @@ lazy val scalatestPlusScalaCheck =
         }
       }
     )
-
-lazy val scalatestPlusScalaCheckJS     = scalatestPlusScalaCheck.js
-lazy val scalatestPlusScalaCheckJVM    = scalatestPlusScalaCheck.jvm
-lazy val scalatestPlusScalaCheckNative = scalatestPlusScalaCheck.native
