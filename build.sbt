@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import scalanative.sbtplugin.ScalaNativePluginInternal.NativeTest
 
 val sharedSettings = Seq(
-  name := "scalatestplus-scalacheck",
+  name := "scalacheck-1.14",
   organization := "org.scalatestplus",
   version := "3.1.0.0-RC2",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
