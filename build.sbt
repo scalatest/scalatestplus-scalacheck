@@ -71,9 +71,9 @@ lazy val scalatestPlusScalaCheck =
       )
     )
     .jsSettings(
-      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.10", "2.13.0"),
+      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.10", "2.13.1"),
       libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.0"
+        "org.scalacheck" %%% "scalacheck" % "1.14.1"
       ), 
       sourceGenerators in Compile += {
         Def.task {
@@ -83,9 +83,9 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .jvmSettings(
-      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.10", "2.13.0"),
+      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.10", "2.13.1"),
       libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.0"
+        "org.scalacheck" %%% "scalacheck" % "1.14.1"
       ), 
       sourceGenerators in Compile += {
         Def.task {
@@ -98,7 +98,7 @@ lazy val scalatestPlusScalaCheck =
       scalaVersion := "2.11.12", 
       nativeLinkStubs in NativeTest := true, 
       libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.1-86bd34e-SNAPSHOT"
+        "org.scalacheck" %%% "scalacheck" % "1.14.1"
       ), 
       sourceGenerators in Compile += {
         Def.task {
