@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.scalatestplus.scalacheck
+/*package org.scalatestplus.scalacheck
 
 import org.scalatest.prop.{Generator, Randomizer, SizeParam}
 
@@ -42,3 +42,4 @@ trait ScalaCheckGenerators {
 }
 
 object ScalaCheckGenerators extends ScalaCheckGenerators 
+*/
