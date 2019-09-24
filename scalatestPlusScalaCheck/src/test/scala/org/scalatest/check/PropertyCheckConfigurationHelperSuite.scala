@@ -18,7 +18,7 @@ package scalacheck
 
 import org.scalactic.anyvals._
 
-class PropertyCheckConfigurationHelperSuite extends org.scalatest.funsuite.AnyFunSuite with org.scalatest.Matchers {
+class PropertyCheckConfigurationHelperSuite extends org.scalatest.funsuite.AnyFunSuite with org.scalatest.matchers.should.Matchers {
 
   import org.scalatestplus.scalacheck.ScalaCheckConfiguration._
 

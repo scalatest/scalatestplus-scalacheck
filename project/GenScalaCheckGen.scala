@@ -1104,7 +1104,7 @@ object ScalaCheckDrivenPropertyChecks extends ScalaCheckDrivenPropertyChecks
 
   val generatorSuitePreamble = """
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.exceptions.GeneratorDrivenPropertyCheckFailedException
 import org.scalacheck.Gen
                                """
