@@ -1,10 +1,12 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import scalanative.sbtplugin.ScalaNativePluginInternal.NativeTest
+import scala.xml.{Node => XmlNode, NodeSeq => XmlNodeSeq, _}
+import scala.xml.transform.{RewriteRule, RuleTransformer}
 
 val sharedSettings = Seq(
   name := "scalacheck-1.14",
   organization := "org.scalatestplus",
-  version := "3.2.0.0-M1",
+  version := "3.2.0.1-M1",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -28,6 +30,18 @@ val sharedSettings = Seq(
     "org.scalatest" %%% "scalatest-funspec" % "3.2.0-M1" % "test",
     "org.scalatest" %%% "scalatest-funsuite" % "3.2.0-M1" % "test"
   ),
+  // skip dependency elements with a scope
+  pomPostProcess := { (node: XmlNode) =>
+    new RuleTransformer(new RewriteRule {
+      override def transform(node: XmlNode): XmlNodeSeq = node match {
+        case e: Elem if e.label == "dependency"
+            && e.child.exists(child => child.label == "scope") =>
+          def txt(label: String): String = "\"" + e.child.filter(_.label == label).flatMap(_.text).mkString + "\""
+          Comment(s""" scoped dependency ${txt("groupId")} % ${txt("artifactId")} % ${txt("version")} % ${txt("scope")} has been omitted """)
+        case _ => node
+      }
+    }).transform(node).head
+  }, 
   sourceGenerators in Compile += {
     Def.task {
       GenScalaCheckGen.genMain((sourceManaged in Compile).value / "org" / "scalatest" / "check", version.value, scalaVersion.value)
