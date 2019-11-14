@@ -71,6 +71,9 @@ lazy val scalatestPlusScalaCheck =
     .settings(sharedSettings)
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
+      libraryDependencies ++= Seq(
+        "org.scalacheck" %%% "scalacheck" % "1.14.2"
+      ), 
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
@@ -89,9 +92,6 @@ lazy val scalatestPlusScalaCheck =
     )
     .jsSettings(
       crossScalaVersions := List("2.10.7", "2.11.12", "2.12.10", "2.13.1"),
-      libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.1"
-      ), 
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -101,9 +101,6 @@ lazy val scalatestPlusScalaCheck =
     )
     .jvmSettings(
       crossScalaVersions := List("2.10.7", "2.11.12", "2.12.10", "2.13.1"),
-      libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.1"
-      ), 
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -114,9 +111,6 @@ lazy val scalatestPlusScalaCheck =
     .nativeSettings(
       scalaVersion := "2.11.12", 
       nativeLinkStubs in NativeTest := true, 
-      libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.1"
-      ), 
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
