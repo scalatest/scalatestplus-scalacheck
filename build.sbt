@@ -6,7 +6,7 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 val sharedSettings = Seq(
   name := "scalacheck-1.14",
   organization := "org.scalatestplus",
-  version := "3.2.0.0-M2",
+  version := "3.2.0.1-M2",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -72,7 +72,7 @@ lazy val scalatestPlusScalaCheck =
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
       libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.2"
+        "org.scalacheck" %%% "scalacheck" % "1.14.3"
       ), 
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
