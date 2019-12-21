@@ -2,7 +2,7 @@ addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "0.6.0")
 
 addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "0.6.0")
 
-val scalaJSVersion = Option(System.getenv("SCALAJS_VERSION")).getOrElse("0.6.29")
+val scalaJSVersion = Option(System.getenv("SCALAJS_VERSION")).getOrElse("0.6.31")
 
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % scalaJSVersion)
 
