@@ -140,7 +140,7 @@ object GenResourcesJVM extends GenResources {
         |
         |def bigProblems(ex: Throwable): String = {
         |  val message = if (ex.getMessage == null) "" else ex.getMessage.trim
-        |  if (message.length > 0) Resources.bigProblemsWithMessage(message) else Resources.bigProblems
+        |  if (message.length > 0) Resources.bigProblemsWithMessage(message) else Resources.bigProblems()
         |}
         |}
     """.stripMargin
@@ -188,7 +188,7 @@ object GenResourcesJSVM extends GenResources {
         |
         |def bigProblems(ex: Throwable): String = {
         |  val message = if (ex.getMessage == null) "" else ex.getMessage.trim
-        |  if (message.length > 0) Resources.bigProblemsWithMessage(message) else Resources.bigProblems
+        |  if (message.length > 0) Resources.bigProblemsWithMessage(message) else Resources.bigProblems()
         |}
         |}
     """.stripMargin
