@@ -18,7 +18,7 @@
 import org.scalacheck._
 import org.scalatest._
 import Arbitrary._
-import Prop._
+import Prop.{BooleanOperators => _, _}
 import org.scalatest.Matchers._
 import org.scalatest.exceptions.GeneratorDrivenPropertyCheckFailedException
 import org.scalacheck.util.Pretty
