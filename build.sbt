@@ -1,10 +1,12 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import scalanative.sbtplugin.ScalaNativePluginInternal.NativeTest
+import scala.xml.{Node => XmlNode, NodeSeq => XmlNodeSeq, _}
+import scala.xml.transform.{RewriteRule, RuleTransformer}
 
 val sharedSettings = Seq(
   name := "scalacheck-1.14",
   organization := "org.scalatestplus",
-  version := "3.1.1.0",
+  version := "3.1.1.1",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -23,8 +25,21 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.1.1"
+    "org.scalatest" %%% "scalatest" % "3.1.1", 
+    "org.scalacheck" %%% "scalacheck" % "1.14.3"
   ),
+  // skip dependency elements with a scope
+  pomPostProcess := { (node: XmlNode) =>
+    new RuleTransformer(new RewriteRule {
+      override def transform(node: XmlNode): XmlNodeSeq = node match {
+        case e: Elem if e.label == "dependency"
+            && e.child.exists(child => child.label == "scope") =>
+          def txt(label: String): String = "\"" + e.child.filter(_.label == label).flatMap(_.text).mkString + "\""
+          Comment(s""" scoped dependency ${txt("groupId")} % ${txt("artifactId")} % ${txt("version")} % ${txt("scope")} has been omitted """)
+        case _ => node
+      }
+    }).transform(node).head
+  }, 
   sourceGenerators in Compile += {
     Def.task {
       GenScalaCheckGen.genMain((sourceManaged in Compile).value / "org" / "scalatest" / "check", version.value, scalaVersion.value)
@@ -54,6 +69,9 @@ lazy val scalatestPlusScalaCheck =
     .settings(sharedSettings)
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
+      libraryDependencies ++= Seq(
+        "org.scalacheck" %%% "scalacheck" % "1.14.2"
+      ), 
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
@@ -72,9 +90,6 @@ lazy val scalatestPlusScalaCheck =
     )
     .jsSettings(
       crossScalaVersions := List("2.10.7", "2.11.12", "2.12.10", "2.13.1"),
-      libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.3"
-      ), 
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -84,9 +99,6 @@ lazy val scalatestPlusScalaCheck =
     )
     .jvmSettings(
       crossScalaVersions := List("2.10.7", "2.11.12", "2.12.10", "2.13.1"),
-      libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.3"
-      ), 
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -97,9 +109,6 @@ lazy val scalatestPlusScalaCheck =
     .nativeSettings(
       scalaVersion := "2.11.12", 
       nativeLinkStubs in NativeTest := true, 
-      libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.3"
-      ), 
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
