@@ -6,7 +6,7 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 val sharedSettings = Seq(
   name := "scalacheck-1.14",
   organization := "org.scalatestplus",
-  version := "3.1.1.1",
+  version := "3.1.2.0",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -25,7 +25,7 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.1.1", 
+    "org.scalatest" %%% "scalatest" % "3.1.2", 
     "org.scalacheck" %%% "scalacheck" % "1.14.3"
   ),
   // skip dependency elements with a scope
@@ -69,9 +69,6 @@ lazy val scalatestPlusScalaCheck =
     .settings(sharedSettings)
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
-      libraryDependencies ++= Seq(
-        "org.scalacheck" %%% "scalacheck" % "1.14.2"
-      ), 
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
@@ -89,7 +86,7 @@ lazy val scalatestPlusScalaCheck =
       )
     )
     .jsSettings(
-      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.10", "2.13.1"),
+      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.11", "2.13.2"),
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -98,7 +95,7 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .jvmSettings(
-      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.10", "2.13.1"),
+      crossScalaVersions := List("2.10.7", "2.11.12", "2.12.11", "2.13.2"),
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
