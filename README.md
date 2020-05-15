@@ -6,7 +6,7 @@ ScalaTest + ScalaCheck provides integration support between ScalaTest and ScalaC
 Please use the following commands to publish to Sonatype: 
 
 ```
-$ export SCALAJS_VERSION=0.6.32
+$ export SCALAJS_VERSION=0.6.33
 $ sbt clean +scalatestPlusScalaCheckJS/publishSigned +scalatestPlusScalaCheckJVM/publishSigned scalatestPlusScalaCheckNative/publishSigned
 $ export SCALAJS_VERSION=1.0.1
 $ sbt ++2.11.12 "project scalatestPlusScalaCheckJS" clean publishSigned
