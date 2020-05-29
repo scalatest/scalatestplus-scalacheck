@@ -116,7 +116,7 @@ abstract class UnitCheckerAsserting {
             val stackDepth = 1
             
             indicateFailure(
-              sde => FailureMessages.propertyException(prettifier, UnquotedString(sde.getClass.getSimpleName)) + "\n" +
+              sde => FailureMessages.propertyException(prettifier, UnquotedString(getSimpleNameOfAnObjectsClass(sde))) + "\n" +
               ( sde.failedCodeFileNameAndLineNumberString match { case Some(s) => " (" + s + ")"; case None => "" }) + "\n" +
               "  " + FailureMessages.propertyFailed(prettifier, result.succeeded) + "\n" +
               (
@@ -140,7 +140,7 @@ abstract class UnitCheckerAsserting {
           case Test.PropException(scalaCheckArgs, e, scalaCheckLabels) =>
 
             indicateFailure(
-              sde => FailureMessages.propertyException(prettifier, UnquotedString(e.getClass.getSimpleName)) + "\n" +
+              sde => FailureMessages.propertyException(prettifier, UnquotedString(getSimpleNameOfAnObjectsClass(e))) + "\n" +
               "  " + FailureMessages.thrownExceptionsMessage(prettifier, if (e.getMessage == null) "None" else UnquotedString(e.getMessage)) + "\n" +
               (
                 e match {
@@ -153,7 +153,7 @@ abstract class UnitCheckerAsserting {
               prettyArgs(getArgsWithSpecifiedNames(argNames, scalaCheckArgs), prettifier) + "\n" +
               "  )" +
               getLabelDisplay(scalaCheckLabels),
-              FailureMessages.propertyException(prettifier, UnquotedString(e.getClass.getName)),
+              FailureMessages.propertyException(prettifier, UnquotedString(getSimpleNameOfAnObjectsClass(e))),
               scalaCheckArgs,
               scalaCheckLabels.toList,
               Some(e),
@@ -305,7 +305,7 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
         result.discarded + " tests were discarded."
 
     case Test.PropException(args, e, labels) =>
-      FailureMessages.propertyException(prettifier, UnquotedString(e.getClass.getSimpleName)) + "\n" + prettyLabels(labels) + prettyArgs(args, prettifier)
+      FailureMessages.propertyException(prettifier, UnquotedString(getSimpleNameOfAnObjectsClass(e))) + "\n" + prettyLabels(labels) + prettyArgs(args, prettifier)
   }
 
   private[scalacheck] def prettyLabels(labels: Set[String]) = {
