@@ -8,7 +8,7 @@ To use it for ScalaTest 3.1.0 and ScalaCheck 1.14.x:
 SBT: 
 
 ```
-libraryDependencies += "org.scalatestplus" %% "scalacheck-1-14" % "3.1.0.0" % "test"
+libraryDependencies += "org.scalatestplus" %% "scalacheck-1-14" % "3.1.2.0" % "test"
 ```
 
 Maven: 
