@@ -126,7 +126,7 @@ abstract class UnitCheckerAsserting {
                   case _ => ""
                 }
                 ) +
-              "  " + FailureMessages.occurredOnValues + "\n" +
+              "  " + FailureMessages.occurredOnValues() + "\n" +
               prettyArgs(getArgsWithSpecifiedNames(argNames, scalaCheckArgs), prettifier) + "\n" +
               "  )" +
               getLabelDisplay(scalaCheckLabels),
@@ -149,7 +149,7 @@ abstract class UnitCheckerAsserting {
                   case _ => ""
                 }
               ) +
-              "  " + FailureMessages.occurredOnValues + "\n" +
+              "  " + FailureMessages.occurredOnValues() + "\n" +
               prettyArgs(getArgsWithSpecifiedNames(argNames, scalaCheckArgs), prettifier) + "\n" +
               "  )" +
               getLabelDisplay(scalaCheckLabels),
@@ -160,7 +160,7 @@ abstract class UnitCheckerAsserting {
               pos
             )
         }
-      } else indicateSuccess(FailureMessages.propertyCheckSucceeded)
+      } else indicateSuccess(FailureMessages.propertyCheckSucceeded())
     }
 
     private[scalacheck] def indicateSuccess(message: => String): Result
@@ -266,7 +266,7 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
 
   private[scalacheck] def getLabelDisplay(labels: Set[String]): String =
     if (labels.size > 0)
-      "\n  " + (if (labels.size == 1) Resources.propCheckLabel else Resources.propCheckLabels) + "\n" + labels.map("    " + _).mkString("\n")
+      "\n  " + (if (labels.size == 1) Resources.propCheckLabel() else Resources.propCheckLabels()) + "\n" + labels.map("    " + _).mkString("\n")
     else
       ""
 
