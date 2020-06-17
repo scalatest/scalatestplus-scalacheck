@@ -60,9 +60,16 @@ val sharedSettings = Seq(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
-  credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
-  pgpSecretRing := file((Path.userHome / ".gnupg" / "secring.gpg").getAbsolutePath),
-  pgpPassphrase := None
+  pomExtra := (
+    <scm>
+      <url>https://github.com/scalatest/scalatestplus-scalacheck</url>
+      <connection>scm:git:git@github.com:scalatest/scalatestplus-scalacheck.git</connection>
+      <developerConnection>
+        scm:git:git@github.com:scalatest/scalatestplus-scalacheck.git
+      </developerConnection>
+    </scm>
+  ),  
+  credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 )
 
 lazy val scalatestPlusScalaCheck =

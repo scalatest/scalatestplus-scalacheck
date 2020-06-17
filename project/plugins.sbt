@@ -8,9 +8,7 @@ addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % scalaJSVer
 
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.4.0-M2")
 
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.1")
-
-addSbtPlugin("com.geirsson" % "sbt-ci-release" % "1.2.2")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.1")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-osgi" % "0.9.4")
 
