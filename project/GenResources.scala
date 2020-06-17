@@ -209,7 +209,7 @@ object GenResourcesJSVM extends GenResources {
     "final val raw" + kv.key.capitalize + " = \"" + kv.value.replaceAllLiterally("\"", "\\\"").replaceAllLiterally("''", "'") + "\"\n\n" +
     (
       if (paramCount == 0 )
-        "final val " + kv.key + " = raw" + kv.key.capitalize
+        "final def " + kv.key + "() = raw" + kv.key.capitalize
       else
         "def " + kv.key + "(" + (for (i <- 0 until paramCount) yield s"param$i: Any").mkString(", ") + "): String = \n" +
         "  raw" + kv.key.capitalize + (for (i <- 0 until paramCount) yield ".replaceAllLiterally(\"{" + i + "}\", param" + i + " + \"\")").mkString + "\n"
@@ -223,7 +223,7 @@ object GenResourcesJSVM extends GenResources {
 
   def failureMessagesKeyValueTemplate(kv: KeyValue, paramCount: Int): String =
     if (paramCount == 0)
-      "final val " + kv.key + " = Resources." + kv.key
+      "final def " + kv.key + "() = Resources." + kv.key
     else
       "object " + kv.key + " { \ndef apply(" + (if (paramCount == 0) "" else "prettifier: org.scalactic.Prettifier, ") + (for (i <- 0 until paramCount) yield s"param$i: Any").mkString(", ") + "): String = \n" +
       "  Resources." + kv.key + "(" + (for (i <- 0 until paramCount) yield s"decorateToStringValue(prettifier, param$i)").mkString(", ") + ")" + "\n" +
