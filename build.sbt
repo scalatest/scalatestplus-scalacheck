@@ -6,7 +6,7 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 val sharedSettings = Seq(
   name := "scalacheck-1.14",
   organization := "org.scalatestplus",
-  version := "3.1.3.0",
+  version := "3.1.4.0",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -25,7 +25,7 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.1.3", 
+    "org.scalatest" %%% "scalatest" % "3.1.4", 
     ("org.scalacheck" %%% "scalacheck" % "1.14.3").withDottyCompat(scalaVersion.value)
   ),
   // skip dependency elements with a scope
