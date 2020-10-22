@@ -69,7 +69,8 @@ val sharedSettings = Seq(
       </developerConnection>
     </scm>
   ),  
-  credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
+  credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"), 
+  scalacOptions in (Compile, doc) := Seq("-doc-title", s"ScalaTest + ScalaCheck ${version.value}")
 )
 
 lazy val scalatestPlusScalaCheck =
