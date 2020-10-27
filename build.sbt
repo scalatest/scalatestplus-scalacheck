@@ -4,7 +4,7 @@ import scala.xml.{Node => XmlNode, NodeSeq => XmlNodeSeq, _}
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 
 val sharedSettings = Seq(
-  name := "scalacheck-1.14",
+  name := "scalacheck-1.15",
   organization := "org.scalatestplus",
   version := "3.2.2.0",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
