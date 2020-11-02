@@ -68,9 +68,20 @@ val sharedSettings = Seq(
         scm:git:git@github.com:scalatest/scalatestplus-scalacheck.git
       </developerConnection>
     </scm>
-  ),  
-  credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"), 
-  scalacOptions in (Compile, doc) := Seq("-doc-title", s"ScalaTest + ScalaCheck ${version.value}")
+  ),
+  credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
+  scalacOptions in (Compile, doc) := {
+    if (scalaBinaryVersion.value startsWith "0.2") 
+      Seq.empty
+    else
+      Seq("-doc-title", s"ScalaTest + ScalaCheck ${version.value}")
+  }, 
+  publishArtifact in (Compile, packageDoc) := {
+    if (scalaBinaryVersion.value startsWith "0.2")
+      false // Temporary disable publishing of doc in dotty, can't get it to build.
+    else
+      true  
+  }
 )
 
 lazy val scalatestPlusScalaCheck =
