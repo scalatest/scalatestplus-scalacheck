@@ -26,7 +26,7 @@ val sharedSettings = Seq(
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest-core" % "3.2.3",
-    "org.scalacheck" %%% "scalacheck" % "1.15.0",
+    "org.scalacheck" %%% "scalacheck" % "1.15.1",
     "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.3" % "test",
     "org.scalatest" %%% "scalatest-funspec" % "3.2.3" % "test",
     "org.scalatest" %%% "scalatest-funsuite" % "3.2.3" % "test"
@@ -77,7 +77,7 @@ val sharedSettings = Seq(
       Seq("-doc-title", s"ScalaTest + ScalaCheck ${version.value}")
   }, 
   publishArtifact in (Compile, packageDoc) := {
-    if (scalaBinaryVersion.value startsWith "0.2")
+    if (scalaBinaryVersion.value startsWith "3.")
       false // Temporary disable publishing of doc in dotty, can't get it to build.
     else
       true  

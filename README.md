@@ -30,7 +30,5 @@ Please use the following commands to publish to Sonatype:
 $ export SCALAJS_VERSION=0.6.33
 $ sbt clean +scalatestPlusScalaCheckJS/publishSigned +scalatestPlusScalaCheckJVM/publishSigned scalatestPlusScalaCheckNative/publishSigned
 $ export SCALAJS_VERSION=1.3.0
-$ sbt ++2.11.12 "project scalatestPlusScalaCheckJS" clean publishSigned
-$ sbt ++2.12.12 "project scalatestPlusScalaCheckJS" clean publishSigned
-$ sbt ++2.13.3 "project scalatestPlusScalaCheckJS" clean publishSigned
+$ sbt clean +scalatestPlusScalaCheckJS/publishSigned
 ```
