@@ -118,7 +118,7 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .jvmSettings(
-      crossScalaVersions := List("2.11.12", "2.12.12", "2.13.3", "0.27.0-RC1"),
+      crossScalaVersions := List("2.11.12", "2.12.12", "2.13.3", "3.0.0-M1"),
       Test / scalacOptions ++= (if (isDotty.value) Seq("-language:implicitConversions") else Nil),
       sourceGenerators in Compile += {
         Def.task {
