@@ -91,7 +91,7 @@ lazy val scalatestPlusScalaCheck =
     .settings(sharedSettings)
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
-      scalaVersion := "2.13.3", 
+      scalaVersion := "2.13.4", 
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
@@ -109,7 +109,7 @@ lazy val scalatestPlusScalaCheck =
       )
     )
     .jsSettings(
-      crossScalaVersions := List("2.11.12", "2.12.12", "2.13.3"),
+      crossScalaVersions := List("2.11.12", "2.12.12", "2.13.4"),
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -118,7 +118,7 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .jvmSettings(
-      crossScalaVersions := List("2.11.12", "2.12.12", "2.13.3", "3.0.0-M1"),
+      crossScalaVersions := List("2.11.12", "2.12.12", "2.13.4", "3.0.0-M2"),
       Test / scalacOptions ++= (if (isDotty.value) Seq("-language:implicitConversions") else Nil),
       sourceGenerators in Compile += {
         Def.task {
