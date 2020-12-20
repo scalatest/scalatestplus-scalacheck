@@ -26,7 +26,7 @@ val sharedSettings = Seq(
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest-core" % "3.2.3",
-    "org.scalacheck" %%% "scalacheck" % "1.15.1",
+    "org.scalacheck" %%% "scalacheck" % "1.15.2",
     "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.3" % "test",
     "org.scalatest" %%% "scalatest-funspec" % "3.2.3" % "test",
     "org.scalatest" %%% "scalatest-funsuite" % "3.2.3" % "test"
@@ -118,7 +118,7 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .jvmSettings(
-      crossScalaVersions := List("2.11.12", "2.12.12", "2.13.4", "3.0.0-M2"),
+      crossScalaVersions := List("2.11.12", "2.12.12", "2.13.4", "3.0.0-M3"),
       Test / scalacOptions ++= (if (isDotty.value) Seq("-language:implicitConversions") else Nil),
       sourceGenerators in Compile += {
         Def.task {
