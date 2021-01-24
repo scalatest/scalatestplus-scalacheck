@@ -1,12 +1,26 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
-import scalanative.sbtplugin.ScalaNativePluginInternal.NativeTest
 import scala.xml.{Node => XmlNode, NodeSeq => XmlNodeSeq, _}
 import scala.xml.transform.{RewriteRule, RuleTransformer}
+
+val defaultScalaVersion = "2.13.4"
+
+scalaVersion := defaultScalaVersion
+
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  Some("publish-releases" at nexus + "service/local/staging/deploy/maven2")
+}
+
+publishArtifact := false
+
+publish := {}
+
+publishLocal := {}
 
 val sharedSettings = Seq(
   name := "scalacheck-1.15",
   organization := "org.scalatestplus",
-  version := "3.2.3.0",
+  version := "3.2.4.0-M1",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -25,11 +39,11 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-core" % "3.2.3",
+    "org.scalatest" %%% "scalatest-core" % "3.2.4-M1",
     "org.scalacheck" %%% "scalacheck" % "1.15.2",
-    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.3" % "test",
-    "org.scalatest" %%% "scalatest-funspec" % "3.2.3" % "test",
-    "org.scalatest" %%% "scalatest-funsuite" % "3.2.3" % "test"
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.4-M1" % "test",
+    "org.scalatest" %%% "scalatest-funspec" % "3.2.4-M1" % "test",
+    "org.scalatest" %%% "scalatest-funsuite" % "3.2.4-M1" % "test"
   ),
   // skip dependency elements with a scope
   pomPostProcess := { (node: XmlNode) =>
@@ -91,7 +105,7 @@ lazy val scalatestPlusScalaCheck =
     .settings(sharedSettings)
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
-      scalaVersion := "2.13.4", 
+      scalaVersion := defaultScalaVersion, 
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
@@ -109,7 +123,7 @@ lazy val scalatestPlusScalaCheck =
       )
     )
     .jsSettings(
-      crossScalaVersions := List("2.11.12", "2.12.12", "2.13.4"),
+      crossScalaVersions := List("2.11.12", "2.12.13", defaultScalaVersion),
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -118,7 +132,7 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .jvmSettings(
-      crossScalaVersions := List("2.11.12", "2.12.12", "2.13.4", "3.0.0-M3"),
+      crossScalaVersions := List("2.11.12", "2.12.13", defaultScalaVersion, "3.0.0-M3"),
       Test / scalacOptions ++= (if (isDotty.value) Seq("-language:implicitConversions") else Nil),
       sourceGenerators in Compile += {
         Def.task {
@@ -128,8 +142,8 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .nativeSettings(
-      scalaVersion := "2.11.12",
-      nativeLinkStubs in NativeTest := true,
+      crossScalaVersions := List("2.11.12", "2.12.13", defaultScalaVersion),
+      nativeLinkStubs in Test := true,
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
