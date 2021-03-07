@@ -20,7 +20,7 @@ publishLocal := {}
 val sharedSettings = Seq(
   name := "scalacheck-1.15",
   organization := "org.scalatestplus",
-  version := "3.2.5.0",
+  version := "3.2.6.0",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -39,11 +39,11 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-core" % "3.2.5",
+    "org.scalatest" %%% "scalatest-core" % "3.2.6",
     "org.scalacheck" %%% "scalacheck" % "1.15.3",
-    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.5" % "test",
-    "org.scalatest" %%% "scalatest-funspec" % "3.2.5" % "test",
-    "org.scalatest" %%% "scalatest-funsuite" % "3.2.5" % "test"
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.6" % "test",
+    "org.scalatest" %%% "scalatest-funspec" % "3.2.6" % "test",
+    "org.scalatest" %%% "scalatest-funsuite" % "3.2.6" % "test"
   ),
   // skip dependency elements with a scope
   pomPostProcess := { (node: XmlNode) =>
