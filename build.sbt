@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import scala.xml.{Node => XmlNode, NodeSeq => XmlNodeSeq, _}
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 
-val defaultScalaVersion = "2.13.4"
+val defaultScalaVersion = "2.13.5"
 
 scalaVersion := defaultScalaVersion
 
@@ -20,7 +20,7 @@ publishLocal := {}
 val sharedSettings = Seq(
   name := "scalacheck-1.15",
   organization := "org.scalatestplus",
-  version := "3.2.6.0",
+  version := "3.2.7.0",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -39,11 +39,11 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-core" % "3.2.6",
+    "org.scalatest" %%% "scalatest-core" % "3.2.7",
     "org.scalacheck" %%% "scalacheck" % "1.15.3",
-    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.6" % "test",
-    "org.scalatest" %%% "scalatest-funspec" % "3.2.6" % "test",
-    "org.scalatest" %%% "scalatest-funsuite" % "3.2.6" % "test"
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.7" % "test",
+    "org.scalatest" %%% "scalatest-funspec" % "3.2.7" % "test",
+    "org.scalatest" %%% "scalatest-funsuite" % "3.2.7" % "test"
   ),
   // skip dependency elements with a scope
   pomPostProcess := { (node: XmlNode) =>
@@ -123,7 +123,7 @@ lazy val scalatestPlusScalaCheck =
       )
     )
     .jsSettings(
-      crossScalaVersions := List("2.12.13", defaultScalaVersion),
+      crossScalaVersions := List("2.12.13", defaultScalaVersion, "3.0.0-RC2"),
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -132,7 +132,7 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .jvmSettings(
-      crossScalaVersions := List("2.12.13", defaultScalaVersion, "3.0.0-RC1"),
+      crossScalaVersions := List("2.12.13", defaultScalaVersion, "3.0.0-RC2"),
       Test / scalacOptions ++= (if (isDotty.value) Seq("-language:implicitConversions") else Nil),
       sourceGenerators in Compile += {
         Def.task {

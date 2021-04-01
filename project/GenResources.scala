@@ -180,7 +180,7 @@ object GenResourcesJSVM extends GenResources {
         |
         |def formatString(rawString: String, args: Array[Any]): String = {
         |  args.zipWithIndex.foldLeft(rawString) { case (result, (arg, idx)) =>
-        |    result.replaceAllLiterally("{" + idx + "}", arg + "")
+        |    result.replaceAllLiterally("{" + idx + "}", arg.toString())
         |  }
         |}
         |
@@ -212,7 +212,7 @@ object GenResourcesJSVM extends GenResources {
         "final def " + kv.key + "() = raw" + kv.key.capitalize
       else
         "def " + kv.key + "(" + (for (i <- 0 until paramCount) yield s"param$i: Any").mkString(", ") + "): String = \n" +
-        "  raw" + kv.key.capitalize + (for (i <- 0 until paramCount) yield ".replaceAllLiterally(\"{" + i + "}\", param" + i + " + \"\")").mkString + "\n"
+        "  raw" + kv.key.capitalize + (for (i <- 0 until paramCount) yield ".replaceAllLiterally(\"{" + i + "}\", param" + i + ".toString())").mkString + "\n"
         /*"object " + kv.key + " { \ndef apply(" + (for (i <- 0 until paramCount) yield s"param$i: Any").mkString(", ") + "): String = \n" +
         "  raw" + kv.key.capitalize + (for (i <- 0 until paramCount) yield ".replaceAllLiterally(\"{" + i + "}\", param" + i + " + \"\")").mkString + "\n" +
         "}"*/
@@ -223,7 +223,7 @@ object GenResourcesJSVM extends GenResources {
 
   def failureMessagesKeyValueTemplate(kv: KeyValue, paramCount: Int): String =
     if (paramCount == 0)
-      "final def " + kv.key + "() = Resources." + kv.key
+      "final def " + kv.key + "() = Resources." + kv.key + "()"
     else
       "object " + kv.key + " { \ndef apply(" + (if (paramCount == 0) "" else "prettifier: org.scalactic.Prettifier, ") + (for (i <- 0 until paramCount) yield s"param$i: Any").mkString(", ") + "): String = \n" +
       "  Resources." + kv.key + "(" + (for (i <- 0 until paramCount) yield s"decorateToStringValue(prettifier, param$i)").mkString(", ") + ")" + "\n" +
