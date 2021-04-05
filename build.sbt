@@ -1,6 +1,8 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import scala.xml.{Node => XmlNode, NodeSeq => XmlNodeSeq, _}
 import scala.xml.transform.{RewriteRule, RuleTransformer}
+import java.io.PrintWriter
+import scala.io.Source
 
 val defaultScalaVersion = "2.13.5"
 
@@ -16,6 +18,33 @@ publishArtifact := false
 publish := {}
 
 publishLocal := {}
+
+def docTask(docDir: File, resDir: File, projectName: String): File = {
+  val docLibDir = docDir / "lib"
+  val htmlSrcDir = resDir / "html"
+  val cssFile = docLibDir / "template.css"
+  val addlCssFile = htmlSrcDir / "addl.css"
+
+  val css = Source.fromFile(cssFile).mkString
+  val addlCss = Source.fromFile(addlCssFile).mkString
+
+  if (!css.contains("pre.stHighlighted")) {
+    val writer = new PrintWriter(cssFile)
+
+    try {
+      writer.println(css)
+      writer.println(addlCss)
+    }
+    finally { writer.close }
+  }
+
+  if (projectName.contains("scalatest")) {
+    (htmlSrcDir * "*.gif").get.foreach { gif =>
+      IO.copyFile(gif, docLibDir / gif.name)
+    }
+  }
+  docDir
+}
 
 val sharedSettings = Seq(
   name := "scalacheck-1.15",
@@ -84,11 +113,16 @@ val sharedSettings = Seq(
     </scm>
   ),
   credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
+  doc in Compile := docTask((doc in Compile).value,
+                          (sourceDirectory in Compile).value,
+                          name.value), 
   scalacOptions in (Compile, doc) := {
-    if (scalaBinaryVersion.value startsWith "0.2") 
+    if (scalaBinaryVersion.value startsWith "3.0") 
       Seq.empty
     else
-      Seq("-doc-title", s"ScalaTest + ScalaCheck ${version.value}")
+      Seq("-doc-title", s"ScalaTest + ScalaCheck ${version.value}", 
+          "-sourcepath", baseDirectory.value.getAbsolutePath(), 
+          "-doc-source-url", s"https://github.com/scalatest/releases-source/blob/main/scalatestplus-scalacheck/${version.value}€{FILE_PATH}.scala")
   }, 
   publishArtifact in (Compile, packageDoc) := {
     if (scalaBinaryVersion.value startsWith "3.")
