@@ -121,7 +121,7 @@ val sharedSettings = Seq(
       Seq.empty
     else
       Seq("-doc-title", s"ScalaTest + ScalaCheck ${version.value}", 
-          "-sourcepath", baseDirectory.value.getAbsolutePath(), 
+          "-sourcepath", baseDirectory.value.getParentFile().getAbsolutePath(), 
           "-doc-source-url", s"https://github.com/scalatest/releases-source/blob/main/scalatestplus-scalacheck/${version.value}€{FILE_PATH}.scala")
   }, 
   publishArtifact in (Compile, packageDoc) := {
