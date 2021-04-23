@@ -41,7 +41,7 @@ $ sbt clean +publishSigned
 2. Copy generated files in .jvm to main source: 
 
 ```
-> cp -r scalatestPlusScalaCheck/.jvm/target/scala-2.13/src_managed/main scalatestPlusScalaCheck/src/
+> cp -r scalatestPlusScalaCheck/.jvm/target/scala-2.13/src_managed/main scalatestPlusScalaCheck/src/scala/
 ```
 
 3. Comment out source generators in build.sbt under sharedSettings and scalatestPlusScalaCheck's .jvmSettings .
