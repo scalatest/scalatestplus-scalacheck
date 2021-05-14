@@ -49,7 +49,7 @@ def docTask(docDir: File, resDir: File, projectName: String): File = {
 val sharedSettings = Seq(
   name := "scalacheck-1.15",
   organization := "org.scalatestplus",
-  version := "3.2.8.0",
+  version := "3.2.9.0",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -68,11 +68,11 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-core" % "3.2.8",
-    "org.scalacheck" %%% "scalacheck" % "1.15.3",
-    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.8" % "test",
-    "org.scalatest" %%% "scalatest-funspec" % "3.2.8" % "test",
-    "org.scalatest" %%% "scalatest-funsuite" % "3.2.8" % "test"
+    "org.scalatest" %%% "scalatest-core" % "3.2.9",
+    "org.scalacheck" %%% "scalacheck" % "1.15.4",
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.9" % "test",
+    "org.scalatest" %%% "scalatest-funspec" % "3.2.9" % "test",
+    "org.scalatest" %%% "scalatest-funsuite" % "3.2.9" % "test"
   ),
   // skip dependency elements with a scope
   pomPostProcess := { (node: XmlNode) =>
@@ -117,7 +117,7 @@ val sharedSettings = Seq(
                           (sourceDirectory in Compile).value,
                           name.value), 
   scalacOptions in (Compile, doc) := {
-    if (scalaBinaryVersion.value startsWith "3.0") 
+    if (scalaBinaryVersion.value startsWith "3") 
       Seq.empty
     else
       Seq("-doc-title", s"ScalaTest + ScalaCheck ${version.value}", 
@@ -125,7 +125,7 @@ val sharedSettings = Seq(
           "-doc-source-url", s"https://github.com/scalatest/releases-source/blob/main/scalatestplus-scalacheck/${version.value}€{FILE_PATH}.scala")
   }, 
   publishArtifact in (Compile, packageDoc) := {
-    if (scalaBinaryVersion.value startsWith "3.")
+    if (scalaBinaryVersion.value startsWith "3")
       false // Temporary disable publishing of doc in dotty, can't get it to build.
     else
       true  
@@ -157,7 +157,7 @@ lazy val scalatestPlusScalaCheck =
       )
     )
     .jsSettings(
-      crossScalaVersions := List("2.12.13", defaultScalaVersion, "3.0.0-RC3"),
+      crossScalaVersions := List("2.12.13", defaultScalaVersion, "3.0.0"),
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -166,7 +166,7 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .jvmSettings(
-      crossScalaVersions := List("2.12.13", defaultScalaVersion, "3.0.0-RC3"),
+      crossScalaVersions := List("2.12.13", defaultScalaVersion, "3.0.0"),
       Test / scalacOptions ++= (if (isDotty.value) Seq("-language:implicitConversions") else Nil),
       sourceGenerators in Compile += {
         Def.task {
