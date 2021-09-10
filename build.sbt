@@ -86,14 +86,14 @@ val sharedSettings = Seq(
       }
     }).transform(node).head
   },
-  sourceGenerators in Compile += {
+  Compile / sourceGenerators  += {
     Def.task {
-      GenScalaCheckGen.genMain((sourceManaged in Compile).value / "org" / "scalatest" / "check", version.value, scalaVersion.value)
+      GenScalaCheckGen.genMain((Compile / sourceManaged).value / "org" / "scalatest" / "check", version.value, scalaVersion.value)
     }
   },
-  sourceGenerators in Test += {
+  Test / sourceGenerators += {
     Def.task {
-      GenScalaCheckGen.genTest((sourceManaged in Test).value / "org" / "scalatest" / "check", version.value, scalaVersion.value)
+      GenScalaCheckGen.genTest((Test / sourceManaged).value / "org" / "scalatest" / "check", version.value, scalaVersion.value)
     }
   },
   publishTo := {
@@ -101,7 +101,7 @@ val sharedSettings = Seq(
     Some("publish-releases" at nexus + "service/local/staging/deploy/maven2")
   },
   publishMavenStyle := true,
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   pomIncludeRepository := { _ => false },
   pomExtra := (
     <scm>
@@ -113,10 +113,10 @@ val sharedSettings = Seq(
     </scm>
   ),
   credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
-  doc in Compile := docTask((doc in Compile).value,
-                          (sourceDirectory in Compile).value,
+  Compile / doc := docTask((Compile / doc).value,
+                          (Compile / sourceDirectory).value,
                           name.value), 
-  scalacOptions in (Compile, doc) := {
+  Compile / doc / scalacOptions := {
     if (scalaBinaryVersion.value startsWith "3") 
       Seq.empty
     else
@@ -124,7 +124,7 @@ val sharedSettings = Seq(
           "-sourcepath", baseDirectory.value.getParentFile().getAbsolutePath(), 
           "-doc-source-url", s"https://github.com/scalatest/releases-source/blob/main/scalatestplus-scalacheck/${version.value}€{FILE_PATH}.scala")
   }, 
-  publishArtifact in (Compile, packageDoc) := {
+  Compile / packageDoc / publishArtifact := {
     if (scalaBinaryVersion.value startsWith "3")
       false // Temporary disable publishing of doc in dotty, can't get it to build.
     else
@@ -158,29 +158,29 @@ lazy val scalatestPlusScalaCheck =
     )
     .jsSettings(
       crossScalaVersions := List("2.12.14", defaultScalaVersion, "3.0.2"),
-      sourceGenerators in Compile += {
+      Compile / sourceGenerators += {
         Def.task {
-          GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
-          GenResourcesJSVM.genFailureMessages((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
+          GenResourcesJSVM.genResources((Compile / sourceManaged).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
+          GenResourcesJSVM.genFailureMessages((Compile / sourceManaged).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
         }
       }
     )
     .jvmSettings(
       crossScalaVersions := List("2.12.14", defaultScalaVersion, "3.0.2"),
-      sourceGenerators in Compile += {
+      Compile / sourceGenerators += {
         Def.task {
-          GenResourcesJVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
-          GenResourcesJVM.genFailureMessages((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
+          GenResourcesJVM.genResources((Compile / sourceManaged).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
+          GenResourcesJVM.genFailureMessages((Compile / sourceManaged).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
         }
       }
     )
     .nativeSettings(
       crossScalaVersions := List("2.12.14", defaultScalaVersion),
-      nativeLinkStubs in Test := true,
-      sourceGenerators in Compile += {
+      Test / nativeLinkStubs := true,
+      Compile / sourceGenerators += {
         Def.task {
-          GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
-          GenResourcesJSVM.genFailureMessages((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
+          GenResourcesJSVM.genResources((Compile / sourceManaged).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
+          GenResourcesJSVM.genFailureMessages((Compile / sourceManaged).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
         }
       }
     )
