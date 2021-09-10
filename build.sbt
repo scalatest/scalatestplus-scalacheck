@@ -167,7 +167,6 @@ lazy val scalatestPlusScalaCheck =
     )
     .jvmSettings(
       crossScalaVersions := List("2.12.13", defaultScalaVersion, "3.0.0"),
-      Test / scalacOptions ++= (if (isDotty.value) Seq("-language:implicitConversions") else Nil),
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
