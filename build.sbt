@@ -4,7 +4,7 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 import java.io.PrintWriter
 import scala.io.Source
 
-val defaultScalaVersion = "2.13.5"
+val defaultScalaVersion = "2.13.6"
 
 scalaVersion := defaultScalaVersion
 
@@ -157,7 +157,7 @@ lazy val scalatestPlusScalaCheck =
       )
     )
     .jsSettings(
-      crossScalaVersions := List("2.12.13", defaultScalaVersion, "3.0.0"),
+      crossScalaVersions := List("2.12.14", defaultScalaVersion, "3.0.2"),
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJSVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -166,7 +166,7 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .jvmSettings(
-      crossScalaVersions := List("2.12.13", defaultScalaVersion, "3.0.0"),
+      crossScalaVersions := List("2.12.14", defaultScalaVersion, "3.0.2"),
       sourceGenerators in Compile += {
         Def.task {
           GenResourcesJVM.genResources((sourceManaged in Compile).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
@@ -175,7 +175,7 @@ lazy val scalatestPlusScalaCheck =
       }
     )
     .nativeSettings(
-      crossScalaVersions := List("2.12.13", defaultScalaVersion),
+      crossScalaVersions := List("2.12.14", defaultScalaVersion),
       nativeLinkStubs in Test := true,
       sourceGenerators in Compile += {
         Def.task {
