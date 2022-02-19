@@ -15,9 +15,13 @@
  */
 package org.scalatestplus.scalacheck
 
+import org.scalacheck.Prop
 import org.scalacheck.Test.Parameters
 import org.scalacheck.Test.TestCallback
+import org.scalacheck.rng.Seed
 import org.scalatest.prop.Configuration
+
+import scala.util.{Failure, Success}
 
 private[scalacheck] trait ScalaCheckConfiguration extends Configuration {
 
@@ -85,6 +89,21 @@ private[scalacheck] trait ScalaCheckConfiguration extends Configuration {
       .withTestCallback(new TestCallback {})
       .withMaxDiscardRatio(maxDiscardRatio)
       .withCustomClassLoader(None)
+  }
+
+  def getScalaCheckProp(initialProp: Prop,
+                        scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration): Prop = {
+    val withInitialSeed =
+      scalaCheckSeedConfiguration.specifyInitialSeed.fold(initialProp)(initialSeed =>
+        initialProp.useSeed("", Seed.fromBase64(initialSeed) match {
+          case Failure(exception) => throw exception
+          case Success(value) => value
+        })
+      )
+    if (scalaCheckSeedConfiguration.viewFailingSeed)
+      withInitialSeed.viewSeed("")
+    else
+      withInitialSeed
   }
 
 }

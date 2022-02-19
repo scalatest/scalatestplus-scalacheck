@@ -48,6 +48,7 @@ import org.scalacheck.Shrink
 import org.scalacheck.Prop
 import org.scalacheck.Gen
 import org.scalacheck.Prop.{BooleanOperators => _, _}
+import org.scalacheck.rng.Seed
 import org.scalatest.exceptions.DiscardedEvaluationException
 import org.scalatest.prop.Whenever
 import org.scalactic._
@@ -442,6 +443,15 @@ import org.scalactic._
  *   (n: Int, d: Int) => ...
  * </pre>
  *
+ * Likewise, in addition and specifically for scalacheck there is an additional implicit <code>val</code> named
+ * <code>scalaCheckSeedConfiguration</code> defined in the Trait <code>ScalaCheckDrivenPropertyChecks</code> which also
+ * has each value of its configuration parameters set to a default value. You can also override this value to force the
+ * seed properties for each scalacheck property test.
+ *
+ * This is useful in determining and replicating why precisely a test fails. You can use set the
+ * <code>viewFailingSeed</code> value to true to figure out the exact seed that is causing the test/s to fail and then
+ * temporarily set that seed using <code>specifyInitialSeed</code> to replicate the failing test/s.
+ *
  * <p>
  * For more information, see the documentation for supertrait <a href="Configuration.html"><code>Configuration</code></a>.
  * </p>
@@ -449,6 +459,10 @@ import org.scalactic._
  * @author Bill Venners
  */
 trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.scalacheck.ScalaCheckConfiguration {
+  /**
+   * Implicit <code>ScalaCheckSeedConfiguration</code> value providing default configuration values.
+   */
+  implicit val scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration = ScalaCheckSeedConfiguration()
 
   /**
    * Performs a property check by applying the specified property check function to arguments
@@ -575,6 +589,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
     def apply[A, ASSERTION](fun: (A) => ASSERTION)
       (implicit
         config: PropertyCheckConfiguration,
+        scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration,
         arbA: Arbitrary[A], shrA: Shrink[A],
         asserting: CheckerAsserting[ASSERTION],
         prettifier: Prettifier,
@@ -601,7 +616,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = getScalaCheckProp(Prop.forAll(propF), scalaCheckSeedConfiguration)
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -626,6 +641,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
     def apply[A, B, ASSERTION](fun: (A, B) => ASSERTION)
       (implicit
         config: PropertyCheckConfiguration,
+        scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration,
         arbA: Arbitrary[A], shrA: Shrink[A],
         arbB: Arbitrary[B], shrB: Shrink[B],
         asserting: CheckerAsserting[ASSERTION],
@@ -653,7 +669,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = getScalaCheckProp(Prop.forAll(propF), scalaCheckSeedConfiguration)
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -678,6 +694,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
     def apply[A, B, C, ASSERTION](fun: (A, B, C) => ASSERTION)
       (implicit
         config: PropertyCheckConfiguration,
+        scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration,
         arbA: Arbitrary[A], shrA: Shrink[A],
         arbB: Arbitrary[B], shrB: Shrink[B],
         arbC: Arbitrary[C], shrC: Shrink[C],
@@ -706,7 +723,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = getScalaCheckProp(Prop.forAll(propF), scalaCheckSeedConfiguration)
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -731,6 +748,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
     def apply[A, B, C, D, ASSERTION](fun: (A, B, C, D) => ASSERTION)
       (implicit
         config: PropertyCheckConfiguration,
+        scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration,
         arbA: Arbitrary[A], shrA: Shrink[A],
         arbB: Arbitrary[B], shrB: Shrink[B],
         arbC: Arbitrary[C], shrC: Shrink[C],
@@ -760,7 +778,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = getScalaCheckProp(Prop.forAll(propF), scalaCheckSeedConfiguration)
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -785,6 +803,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
     def apply[A, B, C, D, E, ASSERTION](fun: (A, B, C, D, E) => ASSERTION)
       (implicit
         config: PropertyCheckConfiguration,
+        scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration,
         arbA: Arbitrary[A], shrA: Shrink[A],
         arbB: Arbitrary[B], shrB: Shrink[B],
         arbC: Arbitrary[C], shrC: Shrink[C],
@@ -815,7 +834,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = getScalaCheckProp(Prop.forAll(propF), scalaCheckSeedConfiguration)
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -840,6 +859,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
     def apply[A, B, C, D, E, F, ASSERTION](fun: (A, B, C, D, E, F) => ASSERTION)
       (implicit
         config: PropertyCheckConfiguration,
+        scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration,
         arbA: Arbitrary[A], shrA: Shrink[A],
         arbB: Arbitrary[B], shrB: Shrink[B],
         arbC: Arbitrary[C], shrC: Shrink[C],
@@ -871,7 +891,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = getScalaCheckProp(Prop.forAll(propF), scalaCheckSeedConfiguration)
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -898,6 +918,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
   def forAll[$alphaUpper$, ASSERTION](fun: ($alphaUpper$) => ASSERTION)
     (implicit
       config: PropertyCheckConfiguration,
+      scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration,
 $arbShrinks$,
         asserting: CheckerAsserting[ASSERTION],
         prettifier: Prettifier,
@@ -924,7 +945,7 @@ $arbShrinks$,
             Prop.exception(exception.get)
         )
       }
-      val prop = Prop.forAll(propF)
+      val prop = getScalaCheckProp(Prop.forAll(propF), scalaCheckSeedConfiguration)
       val params = getScalaCheckParams(Seq(), config)
       asserting.check(prop, params, prettifier, pos)
   }
@@ -948,6 +969,7 @@ $arbShrinks$,
   def forAll[$alphaUpper$, ASSERTION]($argNameNamesAndTypes$, configParams: PropertyCheckConfigParam*)(fun: ($alphaUpper$) => ASSERTION)
     (implicit
       config: PropertyCheckConfiguration,
+      scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration,
 $arbShrinks$,
         asserting: CheckerAsserting[ASSERTION],
         prettifier: Prettifier,
@@ -974,7 +996,7 @@ $arbShrinks$,
             Prop.exception(exception.get)
         )
       }
-      val prop = Prop.forAll(propF)
+      val prop = getScalaCheckProp(Prop.forAll(propF), scalaCheckSeedConfiguration)
       val params = getScalaCheckParams(configParams, config)
       asserting.check(prop, params, prettifier, pos, Some(List($argNameNames$)))
   }
@@ -1005,6 +1027,7 @@ $arbShrinks$,
   def forAll[$alphaUpper$, ASSERTION]($genArgsAndTypes$, configParams: PropertyCheckConfigParam*)(fun: ($alphaUpper$) => ASSERTION)
     (implicit
       config: PropertyCheckConfiguration,
+      scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration,
 $shrinks$,
         asserting: CheckerAsserting[ASSERTION],
         prettifier: Prettifier,
@@ -1031,7 +1054,7 @@ $shrinks$,
             Prop.exception(exception.get)
         )
       }
-      val prop = Prop.forAll($genArgs$)(propF)
+      val prop = getScalaCheckProp(Prop.forAll($genArgs$)(propF), scalaCheckSeedConfiguration)
       val params = getScalaCheckParams(configParams, config)
       asserting.check(prop, params, prettifier, pos)
   }
@@ -1063,6 +1086,7 @@ $shrinks$,
     (implicit
       config: PropertyCheckConfiguration,
 $shrinks$,
+        scalaCheckSeedConfiguration: ScalaCheckSeedConfiguration,
         asserting: CheckerAsserting[ASSERTION],
         prettifier: Prettifier,
         pos: source.Position
@@ -1091,7 +1115,7 @@ $tupleBusters$
             Prop.exception(exception.get)
         )
       }
-      val prop = Prop.forAll($genArgs$)(propF)
+      val prop = getScalaCheckProp(Prop.forAll($genArgs$)(propF), scalaCheckSeedConfiguration)
       val params = getScalaCheckParams(configParams, config)
       asserting.check(prop, params, prettifier, pos, Some(List($argNameNames$)))
   }
