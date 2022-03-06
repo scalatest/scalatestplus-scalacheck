@@ -601,7 +601,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = withSeedConfiguration(Prop.forAll(propF))
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -653,7 +653,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = withSeedConfiguration(Prop.forAll(propF))
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -706,7 +706,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = withSeedConfiguration(Prop.forAll(propF))
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -760,7 +760,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = withSeedConfiguration(Prop.forAll(propF))
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -815,7 +815,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = withSeedConfiguration(Prop.forAll(propF))
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -871,7 +871,7 @@ trait ScalaCheckDrivenPropertyChecks extends Whenever with org.scalatestplus.sca
               Prop.exception(exception.get)
           )
         }
-        val prop = Prop.forAll(propF)
+        val prop = withSeedConfiguration(Prop.forAll(propF))
         val params = getScalaCheckParams(configParams, config)
         asserting.check(prop, params, prettifier, pos)
     }
@@ -924,7 +924,7 @@ $arbShrinks$,
             Prop.exception(exception.get)
         )
       }
-      val prop = Prop.forAll(propF)
+      val prop = withSeedConfiguration(Prop.forAll(propF))
       val params = getScalaCheckParams(Seq(), config)
       asserting.check(prop, params, prettifier, pos)
   }
@@ -974,7 +974,7 @@ $arbShrinks$,
             Prop.exception(exception.get)
         )
       }
-      val prop = Prop.forAll(propF)
+      val prop = withSeedConfiguration(Prop.forAll(propF))
       val params = getScalaCheckParams(configParams, config)
       asserting.check(prop, params, prettifier, pos, Some(List($argNameNames$)))
   }
@@ -1031,7 +1031,7 @@ $shrinks$,
             Prop.exception(exception.get)
         )
       }
-      val prop = Prop.forAll($genArgs$)(propF)
+      val prop = withSeedConfiguration(Prop.forAll($genArgs$)(propF))
       val params = getScalaCheckParams(configParams, config)
       asserting.check(prop, params, prettifier, pos)
   }
@@ -1091,7 +1091,7 @@ $tupleBusters$
             Prop.exception(exception.get)
         )
       }
-      val prop = Prop.forAll($genArgs$)(propF)
+      val prop = withSeedConfiguration(Prop.forAll($genArgs$)(propF))
       val params = getScalaCheckParams(configParams, config)
       asserting.check(prop, params, prettifier, pos, Some(List($argNameNames$)))
   }

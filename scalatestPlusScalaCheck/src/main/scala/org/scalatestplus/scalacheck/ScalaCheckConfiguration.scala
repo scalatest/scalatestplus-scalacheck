@@ -17,6 +17,7 @@ package org.scalatestplus.scalacheck
 
 import org.scalacheck.Test.Parameters
 import org.scalacheck.Test.TestCallback
+import org.scalacheck.Prop
 import org.scalatest.prop.Configuration
 
 private[scalacheck] trait ScalaCheckConfiguration extends Configuration {
@@ -85,6 +86,13 @@ private[scalacheck] trait ScalaCheckConfiguration extends Configuration {
       .withTestCallback(new TestCallback {})
       .withMaxDiscardRatio(maxDiscardRatio)
       .withCustomClassLoader(None)
+  }
+
+  private[scalacheck] def withSeedConfiguration(initialProp: Prop): Prop = {
+    org.scalatest.prop.Seed.configured match {
+      case Some(seed) => initialProp.useSeed("scalatest", org.scalacheck.rng.Seed(seed.value)).viewSeed("scalatest")
+      case None => initialProp
+    }
   }
 
 }
