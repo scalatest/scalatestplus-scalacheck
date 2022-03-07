@@ -29,6 +29,8 @@ import org.scalatest.exceptions.StackDepthException
 import org.scalatestplus.scalacheck.FailureMessages.decorateToStringValue
 import org.scalatest.exceptions.GeneratorDrivenPropertyCheckFailedException
 import org.scalatest.exceptions.StackDepth
+import scala.util.Try
+import scala.annotation.tailrec
 
 /**
  * Supertrait for <code>CheckerAsserting</code> typeclasses, which are used to implement and determine the result
@@ -98,9 +100,9 @@ abstract class UnitCheckerAsserting {
 
             val failureMsg =
               if (result.succeeded == 1)
-                FailureMessages.propCheckExhaustedAfterOne(prettifier, result.discarded)
+                FailureMessages.propCheckExhaustedAfterOne(prettifier, result.discarded) + prms.initialSeed.map(s => "\n" + FailureMessages.initSeed(prettifier, longSeed(s.toBase64))).getOrElse("")
               else
-                FailureMessages.propCheckExhausted(prettifier, result.succeeded, result.discarded)
+                FailureMessages.propCheckExhausted(prettifier, result.succeeded, result.discarded) + prms.initialSeed.map(s => "\n" + FailureMessages.initSeed(prettifier, longSeed(s.toBase64))).getOrElse("")
 
             indicateFailure(
               sde => failureMsg,
@@ -129,8 +131,8 @@ abstract class UnitCheckerAsserting {
               "  " + FailureMessages.occurredOnValues() + "\n" +
               prettyArgs(getArgsWithSpecifiedNames(argNames, scalaCheckArgs), prettifier) + "\n" +
               "  )" +
-              getLabelDisplay(scalaCheckLabels),
-              FailureMessages.propertyFailed(prettifier, result.succeeded),
+              getLabelDisplay(scalaCheckLabels) + prms.initialSeed.map(s => "\n" + FailureMessages.initSeed(prettifier, longSeed(s.toBase64))).getOrElse(""),
+              FailureMessages.propertyFailed(prettifier, result.succeeded) + prms.initialSeed.map(s => "\n" + FailureMessages.initSeed(prettifier, longSeed(s.toBase64))).getOrElse(""),
               scalaCheckArgs,
               scalaCheckLabels.toList,
               None,
@@ -152,8 +154,8 @@ abstract class UnitCheckerAsserting {
               "  " + FailureMessages.occurredOnValues() + "\n" +
               prettyArgs(getArgsWithSpecifiedNames(argNames, scalaCheckArgs), prettifier) + "\n" +
               "  )" +
-              getLabelDisplay(scalaCheckLabels),
-              FailureMessages.propertyException(prettifier, UnquotedString(e.getClass.getName)),
+              getLabelDisplay(scalaCheckLabels) + prms.initialSeed.map(s => "\n" + FailureMessages.initSeed(prettifier, longSeed(s.toBase64))).getOrElse(""),
+              FailureMessages.propertyException(prettifier, UnquotedString(e.getClass.getName)) + prms.initialSeed.map(s => "\n" + FailureMessages.initSeed(prettifier, longSeed(s.toBase64))).getOrElse(""),
               scalaCheckArgs,
               scalaCheckLabels.toList,
               Some(e),
@@ -340,6 +342,39 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
         (if (a.shrinks > 0) " // " + a.shrinks + (if (a.shrinks == 1) " shrink" else " shrinks") else "")
       )
     strs.mkString("\n")
+  }
+
+  def longSeed(s: String): Long = {
+    def fail(s: String): Nothing = throw new IllegalArgumentException(s)
+
+    def dec(c: Char): Long =
+      if      ('A' <= c && c <= 'Z') (c - 'A').toLong
+      else if ('a' <= c && c <= 'z') ((c - 'a') + 26).toLong
+      else if ('0' <= c && c <= '9') ((c - '0') + 52).toLong
+      else if (c == '-') 62L
+      else if (c == '_') 63L
+      else fail(s"illegal Base64 character: $c")
+
+    val longs = new Array[Long](4)
+    @tailrec def decode(x: Long, shift: Int, i: Int, j: Int): Long =
+      if (i >= 43) {
+        longs(1)
+      } else {
+        val b = dec(s.charAt(i))
+        if (shift < 58) {
+          decode(x | (b << shift), shift + 6, i + 1, j)
+        } else {
+          longs(j) = x | (b << shift)
+          val sh = 64 - shift
+          decode(b >>> sh, 6 - sh, i + 1, j + 1)
+        }
+      }
+
+    if (s.length != 44) fail(s"wrong Base64 length: $s")
+    if (s.charAt(43) != '=') fail(s"wrong Base64 format: $s")
+    if (s.charAt(42) == '=') fail(s"wrong Base64 format: $s")
+    decode(0L, 0, 0, 0)
+
   }
 }
 
