@@ -77,6 +77,12 @@ private[scalacheck] trait ScalaCheckConfiguration extends Configuration {
 
     val maxDiscardRatio: Float = maxDiscardedFactor.getOrElse(config.maxDiscardedFactor.value).toFloat
 
+    val seed =
+      org.scalatest.prop.Seed.configured match {
+        case Some(s) => org.scalacheck.rng.Seed.fromLongs(0xf1ea5eed, s.value, s.value, s.value)
+        case None => org.scalacheck.rng.Seed.random()
+      }
+
     Parameters.default
       .withMinSuccessfulTests(minSuccessfulTests)
       .withMinSize(minSize)
@@ -85,6 +91,7 @@ private[scalacheck] trait ScalaCheckConfiguration extends Configuration {
       .withTestCallback(new TestCallback {})
       .withMaxDiscardRatio(maxDiscardRatio)
       .withCustomClassLoader(None)
+      .withInitialSeed(seed)
   }
 
 }
