@@ -3,12 +3,12 @@ ScalaTest + ScalaCheck provides integration support between ScalaTest and ScalaC
 
 **Usage**
 
-To use it for ScalaTest 3.2.11 and ScalaCheck 1.15.x: 
+To use it for ScalaTest 3.2.12 and ScalaCheck 1.16.x: 
 
 SBT: 
 
 ```
-libraryDependencies += "org.scalatestplus" %% "scalacheck-1-15" % "3.2.11.0" % "test"
+libraryDependencies += "org.scalatestplus" %% "scalacheck-1-16" % "3.2.12.0" % "test"
 ```
 
 Maven: 
@@ -16,8 +16,8 @@ Maven:
 ```
 <dependency>
   <groupId>org.scalatestplus</groupId>
-  <artifactId>scalacheck-1-15_2.13</artifactId>
-  <version>3.2.11.0</version>
+  <artifactId>scalacheck-1-16_2.13</artifactId>
+  <version>3.2.12.0</version>
   <scope>test</scope>
 </dependency>
 ```
