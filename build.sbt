@@ -47,7 +47,7 @@ def docTask(docDir: File, resDir: File, projectName: String): File = {
 }
 
 val sharedSettings = Seq(
-  name := "scalacheck-1.16",
+  name := "scalacheck-1.17",
   organization := "org.scalatestplus",
   version := "3.2.14.0",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
@@ -69,7 +69,7 @@ val sharedSettings = Seq(
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest-core" % "3.2.14",
-    "org.scalacheck" %%% "scalacheck" % "1.16.0",
+    "org.scalacheck" %%% "scalacheck" % "1.17.0",
     "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.14" % "test",
     "org.scalatest" %%% "scalatest-funspec" % "3.2.14" % "test",
     "org.scalatest" %%% "scalatest-funsuite" % "3.2.14" % "test"
