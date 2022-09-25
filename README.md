@@ -17,7 +17,7 @@ Maven:
 <dependency>
   <groupId>org.scalatestplus</groupId>
   <artifactId>scalacheck-1-16_2.13</artifactId>
-  <version>3.2.13.0</version>
+  <version>3.2.14.0</version>
   <scope>test</scope>
 </dependency>
 ```
