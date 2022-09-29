@@ -3,7 +3,7 @@ ScalaTest + ScalaCheck provides integration support between ScalaTest and ScalaC
 
 **Usage**
 
-To use it for ScalaTest 3.2.13 and ScalaCheck 1.14.x: 
+To use it for ScalaTest 3.2.14 and ScalaCheck 1.17.x: 
 
 SBT: 
 
