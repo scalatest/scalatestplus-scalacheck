@@ -65,4 +65,5 @@ $ sbt clean +publishSigned
 > cp -r scalatestPlusScalaCheck/.jvm/target/scala-2.13/api ../scalatest-doc
 > cd ../scalatest-doc
 > ../highlight-scaladoc/scripts/add_adbutler_scalatest.sh
+> ../highlight-scaladoc/scripts/add_ga4_scalatest.sh
 ```
