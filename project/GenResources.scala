@@ -198,7 +198,7 @@ object GenResourcesJSVM extends GenResources {
         |
         |private[$packageName] object FailureMessages {
         |
-        |def decorateToStringValue(prettifier: org.scalactic.Prettifier, o: Any): String = org.scalactic.Prettifier.default(o)
+        |def decorateToStringValue(prettifier: org.scalactic.Prettifier, o: Any): String = prettifier.apply(o)
         |
         |$methods
         |
