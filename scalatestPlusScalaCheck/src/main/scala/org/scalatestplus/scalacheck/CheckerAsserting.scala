@@ -15,13 +15,15 @@
  */
 package org.scalatestplus.scalacheck
 
-import org.scalactic.{Resources => _, FailureMessages => _, UnquotedString => _, _}
+import org.scalactic.{FailureMessages => _, Resources => _, UnquotedString => _, _}
 import NameUtil.getSimpleNameOfAnObjectsClass
 import org.scalacheck.Prop
 import org.scalacheck.Prop.Arg
 import org.scalacheck.Test
 import org.scalacheck.util.Pretty
 import org.scalatest.Assertion
+
+import scala.collection.mutable
 //import org.scalatest.Expectation
 import org.scalatest.Fact
 import org.scalatest.Succeeded
@@ -331,6 +333,14 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
       case _: String    => decorateToStringValue(prettifier, arg.arg)
       case _: Char      => decorateToStringValue(prettifier, arg.arg)
       case _: Array[_]  => decorateToStringValue(prettifier, arg.arg)
+      case _: mutable.WrappedArray[_]  => decorateToStringValue(prettifier, arg.arg)
+      case a if ArrayHelper.isArrayOps(arg.arg) => decorateToStringValue(prettifier, arg.arg)
+      case _: Many[_]  => decorateToStringValue(prettifier, arg.arg)
+      case _: scala.collection.GenMap[_, _]  => decorateToStringValue(prettifier, arg.arg)
+      case _: Iterable[_]  => decorateToStringValue(prettifier, arg.arg)
+      case _: java.util.Collection[_]  => decorateToStringValue(prettifier, arg.arg)
+      case _: java.util.Map[_, _]  => decorateToStringValue(prettifier, arg.arg)
+      case p: Product if p.productArity > 0  => decorateToStringValue(prettifier, arg.arg)
       case _            => arg.prettyArg(new Pretty.Params(0))
     }
 
