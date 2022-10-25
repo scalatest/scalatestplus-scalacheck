@@ -41,8 +41,6 @@ class ScalaCheckDrivenPropertyChecksSpec extends funspec.AnyFunSpec with ScalaCh
         }
 
       assert(e.getMessage().contains("List(" + failingList.take(2).mkString(", ") + ", ...)"))
-
-      println("###debug: " + e.getMessage())
     }
   }
 
