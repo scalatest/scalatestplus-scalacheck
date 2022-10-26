@@ -4,7 +4,7 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 import java.io.PrintWriter
 import scala.io.Source
 
-val defaultScalaVersion = "2.13.8"
+val defaultScalaVersion = "2.13.10"
 
 scalaVersion := defaultScalaVersion
 
@@ -140,7 +140,7 @@ lazy val scalatestPlusScalaCheck =
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
       scalaVersion := defaultScalaVersion, 
-      crossScalaVersions := List("2.12.16", defaultScalaVersion, "3.1.3"),
+      crossScalaVersions := List("2.12.17", defaultScalaVersion, "3.1.3"),
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
