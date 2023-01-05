@@ -4,7 +4,7 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 import java.io.PrintWriter
 import scala.io.Source
 
-val defaultScalaVersion = "2.13.8"
+val defaultScalaVersion = "2.13.10"
 
 scalaVersion := defaultScalaVersion
 
@@ -49,7 +49,7 @@ def docTask(docDir: File, resDir: File, projectName: String): File = {
 val sharedSettings = Seq(
   name := "scalacheck-1.17",
   organization := "org.scalatestplus",
-  version := "3.2.14.0",
+  version := "3.2.15.0",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -68,11 +68,11 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-core" % "3.2.14",
+    "org.scalatest" %%% "scalatest-core" % "3.2.15",
     "org.scalacheck" %%% "scalacheck" % "1.17.0",
-    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.14" % "test",
-    "org.scalatest" %%% "scalatest-funspec" % "3.2.14" % "test",
-    "org.scalatest" %%% "scalatest-funsuite" % "3.2.14" % "test"
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.15" % "test",
+    "org.scalatest" %%% "scalatest-funspec" % "3.2.15" % "test",
+    "org.scalatest" %%% "scalatest-funsuite" % "3.2.15" % "test"
   ),
   // skip dependency elements with a scope
   pomPostProcess := { (node: XmlNode) =>
@@ -140,7 +140,7 @@ lazy val scalatestPlusScalaCheck =
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
       scalaVersion := defaultScalaVersion, 
-      crossScalaVersions := List("2.12.16", defaultScalaVersion, "3.1.3"),
+      crossScalaVersions := List("2.12.17", defaultScalaVersion, "3.1.3"),
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
