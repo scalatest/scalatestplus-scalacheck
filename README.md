@@ -22,6 +22,8 @@ Maven:
 </dependency>
 ```
 
+For more information, please checkout our property-based testing user guide at https://www.scalatest.org/user_guide/property_based_testing .
+
 **Publishing**
 
 Please use the following commands to publish to Sonatype: 
