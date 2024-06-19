@@ -326,30 +326,30 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
   //
   // Passes 0 as verbosity value to prettyArg function.
   //
-  private[scalacheck] def decorateArgToStringValue(arg: Arg[_], prettifier: Prettifier): String =
-    arg.arg match {
-      case null         => decorateToStringValue(prettifier, arg.arg)
-      case _: Unit      => decorateToStringValue(prettifier, arg.arg)
-      case _: String    => decorateToStringValue(prettifier, arg.arg)
-      case _: Char      => decorateToStringValue(prettifier, arg.arg)
-      case _: Array[_]  => decorateToStringValue(prettifier, arg.arg)
-      case _: mutable.WrappedArray[_]  => decorateToStringValue(prettifier, arg.arg)
-      case a if ArrayHelper.isArrayOps(arg.arg) => decorateToStringValue(prettifier, arg.arg)
-      case _: Many[_]  => decorateToStringValue(prettifier, arg.arg)
-      case _: scala.collection.GenMap[_, _]  => decorateToStringValue(prettifier, arg.arg)
-      case _: Iterable[_]  => decorateToStringValue(prettifier, arg.arg)
-      case _: java.util.Collection[_]  => decorateToStringValue(prettifier, arg.arg)
-      case _: java.util.Map[_, _]  => decorateToStringValue(prettifier, arg.arg)
-      case p: Product if p.productArity > 0  => decorateToStringValue(prettifier, arg.arg)
-      case _            => arg.prettyArg(new Pretty.Params(0))
+  private[scalacheck] def decorateArgToStringValue[T](arg: T, prettyArg: Pretty, prettifier: Prettifier): String =
+    arg match {
+      case null         => decorateToStringValue(prettifier, arg)
+      case _: Unit      => decorateToStringValue(prettifier, arg)
+      case _: String    => decorateToStringValue(prettifier, arg)
+      case _: Char      => decorateToStringValue(prettifier, arg)
+      case _: Array[_]  => decorateToStringValue(prettifier, arg)
+      case _: mutable.WrappedArray[_]  => decorateToStringValue(prettifier, arg)
+      case a if ArrayHelper.isArrayOps(arg) => decorateToStringValue(prettifier, arg)
+      case _: Many[_]  => decorateToStringValue(prettifier, arg)
+      case _: scala.collection.GenMap[_, _]  => decorateToStringValue(prettifier, arg)
+      case _: Iterable[_]  => decorateToStringValue(prettifier, arg)
+      case _: java.util.Collection[_]  => decorateToStringValue(prettifier, arg)
+      case _: java.util.Map[_, _]  => decorateToStringValue(prettifier, arg)
+      case p: Product if p.productArity > 0  => decorateToStringValue(prettifier, arg)
+      case _            => prettyArg(new Pretty.Params(0))
     }
 
   private[scalacheck] def prettyArgs(args: List[Arg[_]], prettifier: Prettifier) = {
     val strs = for((a, i) <- args.zipWithIndex) yield (
       "    " +
         (if (a.label == "") "arg" + i else a.label) +
-        " = " + decorateArgToStringValue(a, prettifier) + (if (i < args.length - 1) "," else "") +
-        (if (a.shrinks > 0) " // " + a.shrinks + (if (a.shrinks == 1) " shrink" else " shrinks") else "")
+        " = " + decorateArgToStringValue(a.arg, a.prettyArg, prettifier) + (if (i < args.length - 1) "," else "") +
+        (if (a.shrinks > 0) " // " + a.shrinks + (if (a.shrinks == 1) " shrink" else " shrinks") + " (orig: " + decorateArgToStringValue(a.origArg, a.prettyOrigArg, prettifier) + ")" else "")
       )
     strs.mkString("\n")
   }
