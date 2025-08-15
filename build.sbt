@@ -4,9 +4,9 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 import java.io.PrintWriter
 import scala.io.Source
 
-ThisBuild / organization := "org.scalatestplus.scalacheck" // For sbt sonaUpload
+ThisBuild / organization := "org.scalatestplus"
 
-ThisBuild / version := "3.3.0.0"
+ThisBuild / version := "3.3.0.0-RC1"
 
 val defaultScalaVersion = "2.13.16"
 
@@ -46,7 +46,6 @@ def docTask(docDir: File, resDir: File, projectName: String): File = {
 }
 
 val sharedSettings = Seq(
-  organization := "org.scalatestplus",
   name := "scalacheck-1.18", 
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
