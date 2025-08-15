@@ -4,14 +4,13 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 import java.io.PrintWriter
 import scala.io.Source
 
-val defaultScalaVersion = "2.13.13"
+ThisBuild / organization := "org.scalatestplus"
 
-scalaVersion := defaultScalaVersion
+ThisBuild / version := "3.3.0.0-RC1"
 
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  Some("publish-releases" at nexus + "service/local/staging/deploy/maven2")
-}
+val defaultScalaVersion = "2.13.16"
+
+publishTo := localStaging.value
 
 publishArtifact := false
 
@@ -47,9 +46,7 @@ def docTask(docDir: File, resDir: File, projectName: String): File = {
 }
 
 val sharedSettings = Seq(
-  name := "scalacheck-1.18",
-  organization := "org.scalatestplus",
-  version := "3.2.19.0",
+  name := "scalacheck-1.18", 
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -68,11 +65,11 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-core" % "3.2.19",
-    "org.scalacheck" %%% "scalacheck" % "1.18.0",
-    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.18" % "test",
-    "org.scalatest" %%% "scalatest-funspec" % "3.2.18" % "test",
-    "org.scalatest" %%% "scalatest-funsuite" % "3.2.18" % "test"
+    "org.scalatest" %%% "scalatest-core" % "3.3.0",
+    "org.scalacheck" %%% "scalacheck" % "1.18.1",
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.3.0" % "test",
+    "org.scalatest" %%% "scalatest-funspec" % "3.3.0" % "test",
+    "org.scalatest" %%% "scalatest-funsuite" % "3.3.0" % "test"
   ),
   // skip dependency elements with a scope
   pomPostProcess := { (node: XmlNode) =>
@@ -96,10 +93,7 @@ val sharedSettings = Seq(
       GenScalaCheckGen.genTest((Test / sourceManaged).value / "org" / "scalatest" / "check", version.value, scalaVersion.value)
     }
   },
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    Some("publish-releases" at nexus + "service/local/staging/deploy/maven2")
-  },
+  publishTo := localStaging.value,
   publishMavenStyle := true,
   Test / publishArtifact := false,
   pomIncludeRepository := { _ => false },
@@ -140,7 +134,7 @@ lazy val scalatestPlusScalaCheck =
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
       scalaVersion := defaultScalaVersion, 
-      crossScalaVersions := List("2.12.19", defaultScalaVersion, "3.3.3"),
+      crossScalaVersions := List("2.12.20", defaultScalaVersion, "3.3.6"),
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
@@ -179,7 +173,8 @@ lazy val scalatestPlusScalaCheck =
           GenResourcesJSVM.genResources((Compile / sourceManaged).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value) ++
           GenResourcesJSVM.genFailureMessages((Compile / sourceManaged).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
         }
-      }
+      }, 
+      evictionErrorLevel := Level.Warn  // Workaround as scalacheck 1.18.1 is using test-interface native 0.5.5, when newer scalacheck version available we may try remove this.
     )
 
 lazy val scalatestPlusScalaCheckJS     = scalatestPlusScalaCheck.js
