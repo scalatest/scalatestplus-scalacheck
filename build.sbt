@@ -65,11 +65,11 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-core" % "3.3.0",
+    "org.scalatest" %%% "scalatest-core" % "3.3.0-RC1",
     "org.scalacheck" %%% "scalacheck" % "1.18.1",
-    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.3.0" % "test",
-    "org.scalatest" %%% "scalatest-funspec" % "3.3.0" % "test",
-    "org.scalatest" %%% "scalatest-funsuite" % "3.3.0" % "test"
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.3.0-RC1" % "test",
+    "org.scalatest" %%% "scalatest-funspec" % "3.3.0-RC1" % "test",
+    "org.scalatest" %%% "scalatest-funsuite" % "3.3.0-RC1" % "test"
   ),
   // skip dependency elements with a scope
   pomPostProcess := { (node: XmlNode) =>
