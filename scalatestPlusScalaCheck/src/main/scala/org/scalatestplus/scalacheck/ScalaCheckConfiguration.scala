@@ -21,6 +21,8 @@ import org.scalatest.prop.Configuration
 
 private[scalacheck] trait ScalaCheckConfiguration extends Configuration {
 
+  import Configuration._
+
   private[scalacheck] def getScalaCheckParams(
                                               configParams: Seq[PropertyCheckConfigParam],
                                               config: PropertyCheckConfiguration

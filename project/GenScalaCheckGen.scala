@@ -50,6 +50,7 @@ import org.scalacheck.Gen
 import org.scalacheck.Prop.{BooleanOperators => _, _}
 import org.scalatest.exceptions.DiscardedEvaluationException
 import org.scalatest.prop.Whenever
+import org.scalatest.prop.Configuration._
 import org.scalactic._
 
 /**
@@ -3125,6 +3126,7 @@ $okayExpressions$
           bw.write("import org.scalatestplus.scalacheck." + traitOrObjectName + "._\n")
         if (checkMethod == "expect")
           bw.write("import org.scalatest.Expectations._\n")
+        bw.write("import org.scalatest.prop.Configuration.PropertyCheckConfiguration\n")
         bw.write("\n")
         bw.write(
           "class " + checkMethod.capitalize + suiteClassName + " extends org.scalatest.funspec.AnyFunSpec " +

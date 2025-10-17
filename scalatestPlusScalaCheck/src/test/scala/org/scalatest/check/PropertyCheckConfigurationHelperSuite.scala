@@ -21,6 +21,7 @@ import org.scalactic.anyvals._
 class PropertyCheckConfigurationHelperSuite extends org.scalatest.funsuite.AnyFunSuite with org.scalatest.matchers.should.Matchers {
 
   import org.scalatestplus.scalacheck.ScalaCheckConfiguration._
+  import org.scalatest.prop.Configuration._
 
   val DefaultMinSuccessful: PosInt = 9
   val PassedMinSuccessful: PosInt = 3

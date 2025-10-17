@@ -6,7 +6,7 @@ import scala.io.Source
 
 ThisBuild / organization := "org.scalatestplus"
 
-ThisBuild / version := "3.3.0.0-RC1"
+ThisBuild / version := "3.3.0.0-alpha.2"
 
 val defaultScalaVersion = "2.13.16"
 
@@ -65,11 +65,11 @@ val sharedSettings = Seq(
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-core" % "3.3.0-RC1",
+    "org.scalatest" %%% "scalatest-core" % "3.3.0-alpha.2",
     "org.scalacheck" %%% "scalacheck" % "1.18.1",
-    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.3.0-RC1" % "test",
-    "org.scalatest" %%% "scalatest-funspec" % "3.3.0-RC1" % "test",
-    "org.scalatest" %%% "scalatest-funsuite" % "3.3.0-RC1" % "test"
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.3.0-alpha.2" % "test",
+    "org.scalatest" %%% "scalatest-funspec" % "3.3.0-alpha.2" % "test",
+    "org.scalatest" %%% "scalatest-funsuite" % "3.3.0-alpha.2" % "test"
   ),
   // skip dependency elements with a scope
   pomPostProcess := { (node: XmlNode) =>

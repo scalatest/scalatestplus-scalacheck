@@ -224,6 +224,8 @@ repeatedly pass generated data to the function. In this case, the test data is c
  */
 trait Checkers extends ScalaCheckConfiguration {
 
+  import org.scalatest.prop.Configuration._
+
   private val asserting: CheckerAsserting[Assertion] { type Result = Assertion }  = CheckerAsserting.assertingNatureOfAssertion
 
   /**
