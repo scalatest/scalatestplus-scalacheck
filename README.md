@@ -14,12 +14,12 @@ If ScalaTest has saved you time, helped you ship better software, or become a ke
 
 **Usage**
 
-To use it for ScalaTest 3.2.19 and ScalaCheck 1.18.x: 
+To use it for ScalaTest 3.2.19 and ScalaCheck 1.19.x: 
 
 SBT: 
 
 ```
-libraryDependencies += "org.scalatestplus" %% "scalacheck-1-18" % "3.2.19.0" % "test"
+libraryDependencies += "org.scalatestplus" %% "scalacheck-1-19" % "3.2.19.0" % "test"
 ```
 
 Maven: 
@@ -27,7 +27,7 @@ Maven:
 ```
 <dependency>
   <groupId>org.scalatestplus</groupId>
-  <artifactId>scalacheck-1-18_3</artifactId>
+  <artifactId>scalacheck-1-19_3</artifactId>
   <version>3.2.19.0</version>
   <scope>test</scope>
 </dependency>

@@ -3,8 +3,9 @@ import scala.xml.{Node => XmlNode, NodeSeq => XmlNodeSeq, _}
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import java.io.PrintWriter
 import scala.io.Source
+import sbt.util.Level
 
-val defaultScalaVersion = "2.13.13"
+val defaultScalaVersion = "2.13.17"
 
 scalaVersion := defaultScalaVersion
 
@@ -47,7 +48,7 @@ def docTask(docDir: File, resDir: File, projectName: String): File = {
 }
 
 val sharedSettings = Seq(
-  name := "scalacheck-1.18",
+  name := "scalacheck-1.19",
   organization := "org.scalatestplus",
   version := "3.2.19.0",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
@@ -67,12 +68,13 @@ val sharedSettings = Seq(
     )
   ),
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+  evictionErrorLevel := Level.Warn,
   libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest-core" % "3.2.19",
-    "org.scalacheck" %%% "scalacheck" % "1.18.0",
-    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.18" % "test",
-    "org.scalatest" %%% "scalatest-funspec" % "3.2.18" % "test",
-    "org.scalatest" %%% "scalatest-funsuite" % "3.2.18" % "test"
+    "org.scalacheck" %%% "scalacheck" % "1.19.0",
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.19" % "test",
+    "org.scalatest" %%% "scalatest-funspec" % "3.2.19" % "test",
+    "org.scalatest" %%% "scalatest-funsuite" % "3.2.19" % "test"
   ),
   // skip dependency elements with a scope
   pomPostProcess := { (node: XmlNode) =>
@@ -140,7 +142,7 @@ lazy val scalatestPlusScalaCheck =
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
       scalaVersion := defaultScalaVersion, 
-      crossScalaVersions := List("2.12.19", defaultScalaVersion, "3.3.3"),
+      crossScalaVersions := List("2.12.20", defaultScalaVersion, "3.3.7"),
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
@@ -180,6 +182,9 @@ lazy val scalatestPlusScalaCheck =
           GenResourcesJSVM.genFailureMessages((Compile / sourceManaged).value / "org" / "scalatestplus" / "scalacheck", version.value, scalaVersion.value)
         }
       }
+    )
+    .nativeSettings(
+      libraryDependencies += "org.scala-native" %%% "test-interface" % "0.5.8"
     )
 
 lazy val scalatestPlusScalaCheckJS     = scalatestPlusScalaCheck.js
