@@ -41,6 +41,7 @@ Please use the following commands to publish to Sonatype:
 
 ```
 $ sbt clean +publishSigned
+$ sbt sonaUpload
 ```
 
 **Creating Scaladoc**

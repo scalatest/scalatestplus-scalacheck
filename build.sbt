@@ -5,14 +5,13 @@ import java.io.PrintWriter
 import scala.io.Source
 import sbt.util.Level
 
+ThisBuild / organization := "org.scalatestplus"
+
+ThisBuild / version := "3.2.19.0"
+
 val defaultScalaVersion = "2.13.17"
 
-scalaVersion := defaultScalaVersion
-
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  Some("publish-releases" at nexus + "service/local/staging/deploy/maven2")
-}
+publishTo := localStaging.value
 
 publishArtifact := false
 
@@ -48,9 +47,7 @@ def docTask(docDir: File, resDir: File, projectName: String): File = {
 }
 
 val sharedSettings = Seq(
-  name := "scalacheck-1.19",
-  organization := "org.scalatestplus",
-  version := "3.2.19.0",
+  name := "scalacheck-1.19",  
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -98,10 +95,7 @@ val sharedSettings = Seq(
       GenScalaCheckGen.genTest((Test / sourceManaged).value / "org" / "scalatest" / "check", version.value, scalaVersion.value)
     }
   },
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    Some("publish-releases" at nexus + "service/local/staging/deploy/maven2")
-  },
+  publishTo := localStaging.value,
   publishMavenStyle := true,
   Test / publishArtifact := false,
   pomIncludeRepository := { _ => false },
