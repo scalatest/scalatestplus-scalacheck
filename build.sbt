@@ -7,9 +7,9 @@ import sbt.util.Level
 
 ThisBuild / organization := "org.scalatestplus"
 
-ThisBuild / version := "3.2.19.0"
+ThisBuild / version := "3.2.20.0"
 
-val defaultScalaVersion = "2.13.17"
+val defaultScalaVersion = "2.13.18"
 
 publishTo := localStaging.value
 
@@ -67,11 +67,11 @@ val sharedSettings = Seq(
   resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
   evictionErrorLevel := Level.Warn,
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest-core" % "3.2.19",
+    "org.scalatest" %%% "scalatest-core" % "3.2.20",
     "org.scalacheck" %%% "scalacheck" % "1.19.0",
-    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.19" % "test",
-    "org.scalatest" %%% "scalatest-funspec" % "3.2.19" % "test",
-    "org.scalatest" %%% "scalatest-funsuite" % "3.2.19" % "test"
+    "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.20" % "test",
+    "org.scalatest" %%% "scalatest-funspec" % "3.2.20" % "test",
+    "org.scalatest" %%% "scalatest-funsuite" % "3.2.20" % "test"
   ),
   // skip dependency elements with a scope
   pomPostProcess := { (node: XmlNode) =>
@@ -136,7 +136,7 @@ lazy val scalatestPlusScalaCheck =
     .enablePlugins(SbtOsgi)
     .settings(osgiSettings: _*).settings(
       scalaVersion := defaultScalaVersion, 
-      crossScalaVersions := List("2.12.20", defaultScalaVersion, "3.3.7"),
+      crossScalaVersions := List("2.12.21", defaultScalaVersion, "3.3.7"),
       OsgiKeys.exportPackage := Seq(
         "org.scalatestplus.scalacheck.*"
       ),
