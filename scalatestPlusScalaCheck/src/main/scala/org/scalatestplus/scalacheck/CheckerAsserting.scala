@@ -112,7 +112,8 @@ abstract class UnitCheckerAsserting {
               args,
               labels,
               None,
-              pos
+              pos,
+              None
             )
 
           case Test.Failed(scalaCheckArgs, scalaCheckLabels) =>
@@ -138,10 +139,16 @@ abstract class UnitCheckerAsserting {
               scalaCheckArgs,
               scalaCheckLabels.toList,
               None,
-              pos
+              pos,
+              None
             )
 
           case Test.PropException(scalaCheckArgs, e, scalaCheckLabels) =>
+
+            // Reporting layers exist that replace the failure they report with any AssertionError
+            // found in its cause chain, which would drop this whole property report. Hand such a
+            // throwable over as suppressed instead, where it cannot outrank the report.
+            val causeWouldOutrankReport = e.isInstanceOf[AssertionError]
 
             indicateFailure(
               sde => FailureMessages.propertyException(prettifier, UnquotedString(e.getClass.getSimpleName)) + "\n" +
@@ -160,8 +167,9 @@ abstract class UnitCheckerAsserting {
               FailureMessages.propertyException(prettifier, UnquotedString(e.getClass.getName)) + prms.initialSeed.map(s => "\n" + FailureMessages.initSeed(prettifier, longSeed(s.toBase64))).getOrElse(""),
               scalaCheckArgs,
               scalaCheckLabels.toList,
-              Some(e),
-              pos
+              if (causeWouldOutrankReport) None else Some(e),
+              pos,
+              if (causeWouldOutrankReport) Some(e) else None
             )
         }
       } else indicateSuccess(FailureMessages.propertyCheckSucceeded())
@@ -169,7 +177,7 @@ abstract class UnitCheckerAsserting {
 
     private[scalacheck] def indicateSuccess(message: => String): Result
 
-    private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Result
+    private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position, optionalSuppressed: Option[Throwable]): Result
   }
 
   /**
@@ -182,17 +190,20 @@ abstract class UnitCheckerAsserting {
       type Result = Unit
       def succeed(result: T) = (true, None)
       private[scalacheck] def indicateSuccess(message: => String): Unit = ()
-      private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Unit = {
-        throw new GeneratorDrivenPropertyCheckFailedException(
-          messageFun,
-          optionalCause,
-          pos,
-          None,
-          undecoratedMessage,
-          scalaCheckArgs,
-          None,
-          scalaCheckLabels.toList
-        )
+      private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position, optionalSuppressed: Option[Throwable]): Unit = {
+        val ex =
+          new GeneratorDrivenPropertyCheckFailedException(
+            messageFun,
+            optionalCause,
+            pos,
+            None,
+            undecoratedMessage,
+            scalaCheckArgs,
+            None,
+            scalaCheckLabels.toList
+          )
+        optionalSuppressed.foreach(s => ex.addSuppressed(s))
+        throw ex
       }
     }
 }
@@ -208,7 +219,7 @@ abstract class ExpectationCheckerAsserting extends UnitCheckerAsserting {
       type Result = Expectation
       def succeed(result: Expectation) = (result.isYes, result.cause)
       private[scalacheck] def indicateSuccess(message: => String): Expectation = Fact.Yes(message)(prettifier)
-      private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Expectation = {
+      private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position, optionalSuppressed: Option[Throwable]): Expectation = {
         val gdpcfe =
           new GeneratorDrivenPropertyCheckFailedException(
             messageFun,
@@ -220,6 +231,7 @@ abstract class ExpectationCheckerAsserting extends UnitCheckerAsserting {
             None,
             scalaCheckLabels.toList
           )
+        optionalSuppressed.foreach(s => gdpcfe.addSuppressed(s))
         val message: String = gdpcfe.getMessage
         Fact.No(message)(prettifier)
       }
@@ -243,17 +255,20 @@ object CheckerAsserting extends ExpectationCheckerAsserting {
       type Result = Assertion
       def succeed(result: Assertion) = (true, None)
       private[scalacheck] def indicateSuccess(message: => String): Assertion = Succeeded
-      private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position): Assertion = {
-        throw new GeneratorDrivenPropertyCheckFailedException(
-          messageFun,
-          optionalCause,
-          pos,
-          None,
-          undecoratedMessage,
-          scalaCheckArgs,
-          None,
-          scalaCheckLabels.toList
-        )
+      private[scalacheck] def indicateFailure(messageFun: StackDepthException => String, undecoratedMessage: => String, scalaCheckArgs: List[Any], scalaCheckLabels: List[String], optionalCause: Option[Throwable], pos: source.Position, optionalSuppressed: Option[Throwable]): Assertion = {
+        val ex =
+          new GeneratorDrivenPropertyCheckFailedException(
+            messageFun,
+            optionalCause,
+            pos,
+            None,
+            undecoratedMessage,
+            scalaCheckArgs,
+            None,
+            scalaCheckLabels.toList
+          )
+        optionalSuppressed.foreach(s => ex.addSuppressed(s))
+        throw ex
       }
     }
   }

@@ -42,6 +42,38 @@ class ScalaCheckDrivenPropertyChecksSpec extends funspec.AnyFunSpec with ScalaCh
 
       assert(e.getMessage().contains("List(" + failingList.take(2).mkString(", ") + ", ...)"))
     }
+
+    it("should hand a thrown AssertionError over as suppressed rather than as the cause") {
+      val e =
+        intercept[GeneratorDrivenPropertyCheckFailedException] {
+          forAll { (_: Int) => throw new AssertionError("boom") }
+        }
+
+      assert(e.getCause == null)
+
+      val suppressed = e.getSuppressed
+      assert(suppressed.length == 1)
+      assert(suppressed(0).isInstanceOf[AssertionError])
+      assert(suppressed(0).getMessage == "boom")
+
+      // the report itself must be unaffected
+      assert(e.getMessage.contains("AssertionError was thrown during property evaluation"))
+      assert(e.getMessage.contains("Occurred when passed generated values"))
+      assert(e.getMessage.contains("Init Seed"))
+    }
+
+    it("should still pass a thrown exception that is not an AssertionError as the cause") {
+      val iae = new IllegalArgumentException("boom")
+
+      val e =
+        intercept[GeneratorDrivenPropertyCheckFailedException] {
+          forAll { (_: Int) => throw iae }
+        }
+
+      assert(e.getCause eq iae)
+      assert(e.getSuppressed.isEmpty)
+      assert(e.getMessage.contains("Init Seed"))
+    }
   }
 
 }
