@@ -47,7 +47,7 @@ def docTask(docDir: File, resDir: File, projectName: String): File = {
 }
 
 val sharedSettings = Seq(
-  name := "scalacheck-1.19",  
+  name := "scalacheck-1.20",
   homepage := Some(url("https://github.com/scalatest/scalatestplus-scalacheck")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
@@ -68,7 +68,7 @@ val sharedSettings = Seq(
   evictionErrorLevel := Level.Warn,
   libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest-core" % "3.2.20",
-    "org.scalacheck" %%% "scalacheck" % "1.19.0",
+    "org.scalacheck" %%% "scalacheck" % "1.20.0",
     "org.scalatest" %%% "scalatest-shouldmatchers" % "3.2.20" % "test",
     "org.scalatest" %%% "scalatest-funspec" % "3.2.20" % "test",
     "org.scalatest" %%% "scalatest-funsuite" % "3.2.20" % "test"
